@@ -1,0 +1,34 @@
+root: true
+env:
+  browser: true
+  es2020: true
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:react-hooks/recommended
+  - plugin:react/all
+  - prettier
+ignorePatterns:
+  - dist
+  - ".eslintrc.cjs"
+parser: "@typescript-eslint/parser"
+plugins:
+  - react-refresh
+  - import
+rules:
+  react-refresh/only-export-components: "off"
+  react/react-in-jsx-scope: "off"
+  react/jsx-filename-extension: "off"
+  react/jsx-one-expression-per-line: "off"
+  react/function-component-definition: "off"
+  react/jsx-newline: "off"
+  react/jsx-max-props-per-line: "off"
+  react/jsx-sort-props: "off"
+  react/jsx-no-bind: "off"
+  react/jsx-no-literals: "off"
+  react/jsx-max-depth: "off"
+  react/jsx-props-no-spreading: "off"
+  react/forbid-component-props: "off"
+  react-hooks/exhaustive-deps: "off"
+  no-mixed-spaces-and-tabs: "off"
+  react/jsx-indent: "off"
