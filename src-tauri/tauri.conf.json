@@ -10,6 +10,15 @@
         "version": "0.0.1"
     },
     "tauri": {
+        "updater": {
+            "active": true,
+            "dialog": false,
+            "pubkey": "",
+            "windows": {
+                "installMode": "passive",
+                "installerArgs": []
+            }
+        },
         "allowlist": {
             "all": false,
             "shell": {
@@ -40,7 +49,7 @@
         "bundle": {
             "active": true,
             "targets": "all",
-            "identifier": "jp.alinco8.nokori-jikan-viewer",
+            "identifier": "jp.alinco8.remind-time",
             "icon": [
                 "icons/32x32.png",
                 "icons/128x128.png",

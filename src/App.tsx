@@ -11,12 +11,12 @@ const scheduleMap = new ScheduleMap('school', {
     '3限目': ScheduleTime.fromStr('11:45:00'),
     昼休憩: ScheduleTime.fromStr('12:35:00'),
     '4限目': ScheduleTime.fromStr('13:15:00'),
-    休憩3: ScheduleTime.fromStr('14:05:00'),
+    休憩4: ScheduleTime.fromStr('14:05:00'),
     '5限目': ScheduleTime.fromStr('14:15:00'),
-    休憩4: ScheduleTime.fromStr('15:05:00'),
+    休憩5: ScheduleTime.fromStr('15:05:00'),
     '6限目': ScheduleTime.fromStr('15:15:00'),
-    休憩5: ScheduleTime.fromStr('16:05:00'),
-    終礼: ScheduleTime.fromStr('16:15:00'),
+    終礼: ScheduleTime.fromStr('16:05:00'),
+    放課後: ScheduleTime.fromStr('16:15:00'),
 });
 
 export const App = () => {
