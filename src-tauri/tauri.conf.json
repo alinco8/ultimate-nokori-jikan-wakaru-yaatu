@@ -12,12 +12,13 @@
     "tauri": {
         "updater": {
             "active": true,
-            "dialog": false,
-            "pubkey": "",
+            "dialog": true,
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk3Q0MxOTgwQjhFQzE5NjIKUldSaUdleTRnQm5NbDM2am9KM09vaUFZL1lNbzZXQVl4QVd5OUFwTDF2VzgzMDV5VDc3WHB3dGIK",
             "windows": {
                 "installMode": "passive",
                 "installerArgs": []
-            }
+            },
+            "endpoints": ["https://localhost:3000/latest.json"]
         },
         "allowlist": {
             "all": false,
