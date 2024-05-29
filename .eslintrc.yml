@@ -32,3 +32,4 @@ rules:
   react-hooks/exhaustive-deps: "off"
   no-mixed-spaces-and-tabs: "off"
   react/jsx-indent: "off"
+  react/require-default-props: "off"

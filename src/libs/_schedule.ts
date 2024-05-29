@@ -57,8 +57,6 @@ export class ScheduleMap {
     getCurrentSchedule(time: ScheduleTime) {
         return Object.entries(this.scheduleList).reduce(
             (current: [string, ScheduleTime] | null, schedule) => {
-                console.log(schedule[1].getDiff(time).toSeconds());
-
                 if (0 < schedule[1].getDiff(time).toSeconds()) {
                     return current;
                 }

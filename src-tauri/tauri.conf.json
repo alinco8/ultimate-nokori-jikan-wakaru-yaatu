@@ -2,62 +2,36 @@
     "build": {
         "beforeDevCommand": "bun run dev",
         "beforeBuildCommand": "bun run build",
-        "devPath": "http://localhost:1420",
-        "distDir": "../dist"
+        "frontendDist": "../dist",
+        "devUrl": "http://localhost:1420"
     },
-    "package": {
-        "productName": "remind-time",
-        "version": "0.0.1"
+    "bundle": {
+        "active": true,
+        "targets": "all",
+        "icon": [
+            "icons/32x32.png",
+            "icons/128x128.png",
+            "icons/128x128@2x.png",
+            "icons/icon.icns",
+            "icons/icon.ico"
+        ]
     },
-    "tauri": {
-        "updater": {
-            "active": true,
-            "dialog": true,
-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk3Q0MxOTgwQjhFQzE5NjIKUldSaUdleTRnQm5NbDM2am9KM09vaUFZL1lNbzZXQVl4QVd5OUFwTDF2VzgzMDV5VDc3WHB3dGIK",
-            "windows": {
-                "installMode": "passive",
-                "installerArgs": []
-            },
-            "endpoints": ["https://localhost:3000/latest.json"]
-        },
-        "allowlist": {
-            "all": false,
-            "shell": {
-                "all": false,
-                "open": true
-            }
-        },
-        "windows": [
-            {
-                "title": "remind-time",
-                "width": 800,
-                "height": 600,
-                "hiddenTitle": true,
-                "titleBarStyle": "Overlay",
-                "label": "remind-time",
-                "visible": false,
-                "focus": false
-            }
-        ],
+    "productName": "アルティメットノコリジカンワカルヤーツ",
+    "version": "0.0.1",
+    "identifier": "jp.alinco8.ultimate-nokori-jikan-wakaru-yaatu",
+    "app": {
         "security": {
             "csp": null
         },
-        "systemTray": {
-            "title": "this is title",
-            "iconPath": "./icons/icon.png",
-            "iconAsTemplate": true
-        },
-        "bundle": {
-            "active": true,
-            "targets": "all",
-            "identifier": "jp.alinco8.remind-time",
-            "icon": [
-                "icons/32x32.png",
-                "icons/128x128.png",
-                "icons/128x128@2x.png",
-                "icons/icon.icns",
-                "icons/icon.ico"
-            ]
-        }
+        "windows": [
+            {
+                "label": "main",
+                "width": 800,
+                "height": 600,
+                "hiddenTitle": true,
+                "resizable": true,
+                "titleBarStyle": "Overlay"
+            }
+        ]
     }
 }

@@ -1,13 +1,21 @@
+import { Box, Text } from '@chakra-ui/react';
+import { useTitleStore } from '../../store/title';
+
 export const Header = () => {
+    const title = useTitleStore((store) => store.title);
+
     return (
-        <div
+        <Box
             style={{
                 height: '30px',
                 background: '#eee',
                 textAlign: 'center',
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                cursor: 'default',
             }}
         >
-            設定
-        </div>
+            <Text>{title}</Text>
+        </Box>
     );
 };
