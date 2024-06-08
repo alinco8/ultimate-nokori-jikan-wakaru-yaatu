@@ -6,7 +6,7 @@ export interface TitleStore {
 }
 
 export const useTitleStore = create<TitleStore>((set) => ({
-    title: 'main',
+    title: '',
     setTitle(title) {
         set({ title });
     },
