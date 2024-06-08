@@ -1,0 +1,14 @@
+.auto-scaled-input {
+    width: fit-content;
+    span {
+        display: block;
+        opacity: 1;
+        position: absolute;
+        pointer-events: none;
+        z-index: -1000;
+    }
+    input {
+        min-width: 40px;
+        background: transparent;
+    }
+}

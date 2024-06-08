@@ -6,6 +6,11 @@
         "module": "ESNext",
         "skipLibCheck": true,
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./app/*"]
+        },
 
         /* Bundler mode */
         "moduleResolution": "bundler",
@@ -21,6 +26,6 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"],
-    "references": [{ "path": "./tsconfig.node.json" }]
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["server/**/*"]
 }
