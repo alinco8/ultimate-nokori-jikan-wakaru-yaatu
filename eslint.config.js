@@ -1,4 +1,4 @@
-import { FlatCompat } from '@eslint/eslintrc';
+//@ts-check
 import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -6,20 +6,13 @@ import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
 
 import importPlugin from 'eslint-plugin-import';
+import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
-
-const compat = new FlatCompat();
 
 export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
-    ...compat.config({
-        extends: ['plugin:eslint-plugin-react/all'],
-    }),
-    {
-        extends: [...compat.config(reactHooksPlugin.configs.recommended)],
-    },
     prettierConfig,
     {
         files: ['**/*.ts', '**/*.tsx'],
@@ -34,8 +27,11 @@ export default tseslint.config(
         plugins: {
             'react-refresh': reactRefreshPlugin,
             import: importPlugin,
+            react: reactPlugin,
+            'react-hooks': reactHooksPlugin,
         },
         rules: {
+            'react/self-closing-comp': 'error',
             'react-refresh/only-export-components': 'off',
             'react/react-in-jsx-scope': 'off',
             'react/jsx-filename-extension': 'off',
