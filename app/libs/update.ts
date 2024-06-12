@@ -5,8 +5,6 @@ import { check } from '@tauri-apps/plugin-updater';
 export async function checkUpdate() {
     const update = await check();
 
-    console.log(update);
-
     if (update && update.available) {
         await message(
             `アップデートを行います。\n30秒ほどで完了します。\nv${update.currentVersion} → v${update.version}`,
@@ -14,6 +12,7 @@ export async function checkUpdate() {
                 title: 'アップデートが見つかりました',
             },
         );
+        await update.downloadAndInstall();
         await relaunch();
     }
 }

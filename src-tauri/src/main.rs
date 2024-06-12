@@ -2,6 +2,7 @@
 
 use std::sync::Mutex;
 use tauri::{menu::MenuBuilder, tray::TrayIconId, App, AppHandle, Manager, State};
+// use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 struct TrayIdManager {
     id: Mutex<TrayIconId>,
@@ -35,6 +36,22 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
+        // .plugin(
+        //     tauri_plugin_log::Builder::new()
+        //         .targets([
+        //             Target::new(TargetKind::Webview),
+        //             Target::new(TargetKind::Stderr),
+        //             Target::new(TargetKind::LogDir {
+        //                 file_name: Some("webview".into()),
+        //             })
+        //             .filter(|metadata| metadata.target() == WEBVIEW_TARGET),
+        //             Target::new(TargetKind::LogDir {
+        //                 file_name: Some("rust".into()),
+        //             })
+        //             .filter(|metadata| metadata.target() != WEBVIEW_TARGET),
+        //         ])
+        //         .build(),
+        // )
         .plugin(tauri_plugin_updater::Builder::new().build())
         .invoke_handler(tauri::generate_handler![update_title, hide_app])
         .setup(|app: &mut App| {

@@ -17,7 +17,7 @@
         ]
     },
     "productName": "アルティメットノコリジカンワカルヤーツ",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "identifier": "jp.alinco8.ultimate-nokori-jikan-wakaru-yaatu",
     "app": {
         "security": {
@@ -38,7 +38,9 @@
     "plugins": {
         "updater": {
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk3Q0MxOTgwQjhFQzE5NjIKUldSaUdleTRnQm5NbDM2am9KM09vaUFZL1lNbzZXQVl4QVd5OUFwTDF2VzgzMDV5VDc3WHB3dGIK",
-            "endpoints": ["https://unjwy-1-p3881085.deta.app/"]
+            "endpoints": [
+                "https://free-joceline-alinco8-9535565b.koyeb.app/releases/latest"
+            ]
         }
     }
 }

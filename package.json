@@ -1,7 +1,7 @@
 {
     "name": "ultimate-nokori-jikan-wakaru-yaatu",
     "author": "Ali Karatas <ali0207k@gmail.com> ",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "private": true,
     "sideEffects": false,
     "type": "module",
