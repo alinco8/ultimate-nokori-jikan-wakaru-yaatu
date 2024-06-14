@@ -11,13 +11,13 @@ const scheduleList = new ScheduleList({
     休憩2: new HMSObject(11, 35, 0),
     '3限目': new HMSObject(11, 45, 0),
     昼休憩: new HMSObject(12, 35, 0),
-    // '4限目': new HMSObject(13, 15, 0),
-    // 休憩4: new HMSObject(14, 5, 0),
-    // '5限目': new HMSObject(14, 15, 0),
-    // 休憩5: new HMSObject(15, 5, 0),
-    // '6限目': new HMSObject(15, 15, 0),
-    // 終礼: new HMSObject(16, 5, 0),
-    // 放課後: new HMSObject(16, 15, 0),
+    '4限目': new HMSObject(13, 15, 0),
+    休憩4: new HMSObject(14, 5, 0),
+    '5限目': new HMSObject(14, 15, 0),
+    休憩5: new HMSObject(15, 5, 0),
+    '6限目': new HMSObject(15, 15, 0),
+    終礼: new HMSObject(16, 5, 0),
+    放課後: new HMSObject(16, 15, 0),
 });
 
 export const Main = () => {

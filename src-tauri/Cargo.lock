@@ -4827,7 +4827,7 @@ dependencies = [
 
 [[package]]
 name = "ultimate-nokori-jikan-wakaru-yaatu"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "resvg",
  "serde",
