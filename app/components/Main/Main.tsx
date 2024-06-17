@@ -8,7 +8,7 @@ import {
     Stack,
 } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNextTiming } from '~/hooks/nextTiming';
 import { HMSObject, ScheduleList } from '~/libs/schedule';
 
@@ -70,6 +70,10 @@ export const Main = () => {
     };
 
     useNextTiming(onNextTiming, [mode]);
+
+    useEffect(() => {
+        invoke('set_menu_items', { menuItems: scheduleList.toMenuItems() });
+    }, []);
 
     return (
         <Container>

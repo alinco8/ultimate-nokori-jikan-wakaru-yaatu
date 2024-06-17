@@ -95,6 +95,15 @@ export class ScheduleList {
 
         return callback({ current, next });
     }
+
+    toMenuItems(compact?: boolean) {
+        return Object.entries(this.scheduleMap).map(([key, value]) => {
+            return {
+                id: value.toString(),
+                label: `${compact ? this.compactNameMap[key] : key}: ${value.toString()}`,
+            };
+        });
+    }
 }
 
 function zeroPadding(num: number, len: number) {

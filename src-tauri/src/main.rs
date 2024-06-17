@@ -1,8 +1,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::Mutex;
+use std::{sync::Mutex, vec};
 use tauri::{menu::MenuBuilder, tray::TrayIconId, App, AppHandle, Manager, State};
 // use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
+
+#[derive(Clone, serde::Deserialize)]
+struct MenuItem {
+    id: String,
+    label: String,
+}
 
 struct TrayIdManager {
     id: Mutex<Option<TrayIconId>>,
@@ -33,21 +39,27 @@ fn update_title(title: &str, app_handle: AppHandle, tray_id_manager: State<'_, T
     }
 }
 #[tauri::command]
-fn hide_tray(app_handle: AppHandle, tray_id_manager: State<'_, TrayIdManager>) {
-    if let Some(id) = &tray_id_manager.get_id() {
-        app_handle.remove_tray_by_id(id);
-    };
+fn set_menu_items(menu_items: Vec<MenuItem>, app_handle: AppHandle) {
+    build_tray(&app_handle, &menu_items);
 }
 
-fn build_tray(app_handle: &AppHandle) {
+fn build_tray(app_handle: &AppHandle, menu_items: &Vec<MenuItem>) {
     let tray_id_manager = app_handle.state::<TrayIdManager>();
 
-    let menu = MenuBuilder::new(app_handle)
+    if let Some(id) = tray_id_manager.get_id() {
+        app_handle.remove_tray_by_id(&id);
+    }
+
+    let mut menu_builder = MenuBuilder::new(app_handle)
         .text("show_app", "アプリを表示")
-        .separator()
-        .quit()
-        .build()
-        .unwrap();
+        .separator();
+
+    for menu_item in menu_items {
+        menu_builder = menu_builder.text(&menu_item.id, &menu_item.label);
+    }
+
+    let menu = menu_builder.separator().quit().build().unwrap();
+
     let tray = tauri::tray::TrayIconBuilder::new()
         .menu(&menu)
         // .icon(tauri::image::Image::from_path("icons/icon.png").unwrap())
@@ -89,7 +101,11 @@ fn main() {
         // )
         .manage(TrayIdManager::new(None))
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![update_title, hide_app])
+        .invoke_handler(tauri::generate_handler![
+            update_title,
+            hide_app,
+            set_menu_items
+        ])
         .setup(|app: &mut App| {
             let handle = app.handle();
 
@@ -98,7 +114,7 @@ fn main() {
                 handle.get_webview_window("main").unwrap().open_devtools();
             }
 
-            build_tray(handle);
+            build_tray(handle, &Vec::new());
 
             #[cfg(desktop)]
             app.handle()
