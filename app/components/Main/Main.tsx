@@ -48,7 +48,9 @@ const scheduleList = new ScheduleList(
 );
 
 export const Main = () => {
-    const [mode, setMode] = useState<'normal' | 'compact'>('normal');
+    const [mode, setMode] = useState<'normal' | 'compact' | 'ultra-compact'>(
+        'normal',
+    );
 
     const onNextTiming = async () => {
         await invoke('update_title', {
@@ -59,6 +61,9 @@ export const Main = () => {
 
                     case 'compact':
                         return `${current ? scheduleList.compactNameMap[current[0]] : '現在の予定なし'} ${next && current ? `=${HMSObject.fromSeconds(HMSObject.fromDate(new Date()).getDiff(next[1])).toString(true)}=> ${scheduleList.compactNameMap[next[0]]}` : '次の予定なし'}`;
+
+                    case 'ultra-compact':
+                        return `${current && next ? HMSObject.fromSeconds(HMSObject.fromDate(new Date()).getDiff(next[1])).toString(true) : 'なし'}`;
                 }
             }),
         });
@@ -75,12 +80,17 @@ export const Main = () => {
                 <RadioGroup
                     defaultValue={mode}
                     onChange={(value) => {
-                        setMode(value as 'normal' | 'compact');
+                        setMode(
+                            value as 'normal' | 'compact' as 'ultra-compact',
+                        );
                     }}
                 >
                     <Stack>
                         <Radio value="normal">通常モード</Radio>
                         <Radio value="compact">コンパクトモード</Radio>
+                        <Radio value="ultra-compact">
+                            超・コンパクトモード
+                        </Radio>
                     </Stack>
                 </RadioGroup>
                 <Button
