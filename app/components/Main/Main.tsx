@@ -65,9 +65,6 @@ export const Main = () => {
     };
 
     useNextTiming(onNextTiming, [mode]);
-    document.body.addEventListener('paste', (e) => {
-        console.log(e.clipboardData?.getData('text/plain'));
-    });
 
     return (
         <Container>
