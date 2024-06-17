@@ -11,8 +11,9 @@
         "resources:default",
         "menu:default",
         "tray:default",
-        "dialog:allow-message",
+        "dialog:allow-confirm",
         "updater:allow-check",
-        "updater:default"
+        "updater:default",
+        "process:allow-restart"
     ]
 }

@@ -17,7 +17,7 @@
         ]
     },
     "productName": "アルティメットノコリジカンワカルヤーツ",
-    "version": "0.0.5",
+    "version": "1.0.0",
     "identifier": "jp.alinco8.ultimate-nokori-jikan-wakaru-yaatu",
     "app": {
         "security": {
@@ -25,13 +25,13 @@
         },
         "windows": [
             {
+                "title": "アルティメットノコリジカンワカルヤーツ",
                 "label": "main",
                 "width": 800,
                 "height": 600,
                 "hiddenTitle": true,
                 "resizable": true,
-                "titleBarStyle": "Overlay",
-                "visible": false
+                "titleBarStyle": "Overlay"
             }
         ]
     },

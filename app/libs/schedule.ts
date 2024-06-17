@@ -31,8 +31,10 @@ export class HMSObject {
     toSeconds() {
         return this.h * 3600 + this.m * 60 + this.s;
     }
-    toString() {
-        return `${zeroPadding(this.h, 2)}:${zeroPadding(this.m, 2)}:${zeroPadding(this.s, 2)}`;
+    toString(without_hour?: boolean) {
+        return without_hour
+            ? `${zeroPadding(this.m + this.h ** 60, 2)}:${zeroPadding(this.s, 2)}`
+            : `${zeroPadding(this.h, 2)}:${zeroPadding(this.m, 2)}:${zeroPadding(this.s, 2)}`;
     }
 
     getDiff(hms: HMSObject) {
@@ -41,7 +43,10 @@ export class HMSObject {
 }
 
 export class ScheduleList {
-    constructor(protected scheduleMap: Record<string, HMSObject>) {}
+    constructor(
+        protected scheduleMap: Record<string, HMSObject>,
+        public compactNameMap: Record<string, string>,
+    ) {}
 
     getClosestSchedule(filterSchedule: HMSObject, mode: 'after' | 'before') {
         const closest = Object.entries(this.scheduleMap)
@@ -71,6 +76,24 @@ export class ScheduleList {
             }, null);
 
         return closest;
+    }
+
+    format(
+        callback: (arg: {
+            current: [string, HMSObject] | null;
+            next: [string, HMSObject] | null;
+        }) => string,
+    ) {
+        const current = this.getClosestSchedule(
+            HMSObject.fromDate(new Date()),
+            'before',
+        );
+        const next = this.getClosestSchedule(
+            HMSObject.fromDate(new Date()),
+            'after',
+        );
+
+        return callback({ current, next });
     }
 }
 
