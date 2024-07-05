@@ -2,14 +2,12 @@ import {
     Button,
     Container,
     Flex,
-    Heading,
     Radio,
     RadioGroup,
     Stack,
 } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/core';
 import { useEffect, useState } from 'react';
-import { useNextTiming } from '~/hooks/nextTiming';
 import { HMSObject, ScheduleList } from '~/libs/schedule';
 
 const scheduleList = new ScheduleList(
@@ -52,49 +50,22 @@ export const Main = () => {
         'normal',
     );
 
-    const onNextTiming = async () => {
-        await invoke('update_title', {
-            title: scheduleList.format(({ current, next }) => {
-                switch (mode) {
-                    case 'normal':
-                        return `[${current ? current[0] : '現在の予定なし'}] ${next && current ? `=${HMSObject.fromSeconds(HMSObject.fromDate(new Date()).getDiff(next[1]))}=> [${next[0]}(${next[1]})]` : '次の予定なし'}`;
-
-                    case 'compact':
-                        return `${current ? scheduleList.compactNameMap[current[0]] : '現在の予定なし'} ${next && current ? `=${HMSObject.fromSeconds(HMSObject.fromDate(new Date()).getDiff(next[1])).toString(true)}=> ${scheduleList.compactNameMap[next[0]]}` : '次の予定なし'}`;
-
-                    case 'ultra-compact':
-                        return `${current && next ? HMSObject.fromSeconds(HMSObject.fromDate(new Date()).getDiff(next[1])).toString(true) : 'なし'}`;
-                }
-            }),
-        });
-    };
-
-    useNextTiming(onNextTiming, [mode]);
-
     useEffect(() => {
-        invoke('set_menu_items', { menuItems: scheduleList.toMenuItems() });
+        invoke('set_schedules', { schedules: scheduleList.toMenuItems() });
     }, []);
 
     return (
         <Container>
             <Flex alignItems="center" direction="column">
-                <Heading size="xl" textAlign="center">
-                    設定
-                </Heading>
                 <RadioGroup
                     defaultValue={mode}
                     onChange={(value) => {
-                        setMode(
-                            value as 'normal' | 'compact' as 'ultra-compact',
-                        );
+                        invoke('set_config', { config: value });
                     }}
                 >
                     <Stack>
                         <Radio value="normal">通常モード</Radio>
                         <Radio value="compact">コンパクトモード</Radio>
-                        <Radio value="ultra-compact">
-                            超・コンパクトモード
-                        </Radio>
                     </Stack>
                 </RadioGroup>
                 <Button
