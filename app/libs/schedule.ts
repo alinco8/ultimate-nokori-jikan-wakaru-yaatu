@@ -96,11 +96,11 @@ export class ScheduleList {
         return callback({ current, next });
     }
 
-    toMenuItems(compact?: boolean) {
+    toMenuItems() {
         return Object.entries(this.scheduleMap).map(([key, value]) => {
             return {
-                id: value.toString(),
-                label: `${compact ? this.compactNameMap[key] : key}: ${value.toString()}`,
+                name: key,
+                time: [value.h, value.m, value.s],
             };
         });
     }
