@@ -38,7 +38,6 @@ fn hide_app(app_handle: AppHandle) {
     let window = app_handle.get_webview_window("main").unwrap();
 
     window.hide().unwrap();
-    window.set_focus().unwrap();
 }
 #[tauri::command]
 fn set_schedules(schedules: Vec<Schedule>, app_handle: AppHandle) {

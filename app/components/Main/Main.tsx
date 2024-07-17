@@ -7,7 +7,9 @@ import {
     Stack,
 } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/core';
+import { getCurrent } from '@tauri-apps/api/window';
 import { useEffect } from 'react';
+import { useListen } from '~/libs/listen';
 import { HMSObject, ScheduleList } from '~/libs/schedule';
 
 const scheduleList = new ScheduleList(
@@ -46,6 +48,10 @@ const scheduleList = new ScheduleList(
 );
 
 export const Main = () => {
+    useListen('tauri://blur', async () => {
+        await getCurrent().hide();
+    });
+
     useEffect(() => {
         invoke('set_schedules', { schedules: scheduleList.toMenuItems() });
     }, []);
