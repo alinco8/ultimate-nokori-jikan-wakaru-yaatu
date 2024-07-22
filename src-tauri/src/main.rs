@@ -1,8 +1,14 @@
+mod manager;
 mod schedule;
 
 use chrono_tz::Asia;
+use manager::ManagerWithLock;
 use schedule::{get_closest, Schedule, SchedulesManager};
-use std::{sync::Mutex, time::Duration, vec};
+use std::{
+    sync::{Mutex, MutexGuard},
+    time::Duration,
+    vec,
+};
 use tauri::{menu::MenuBuilder, tray::TrayIconId, AppHandle, Manager};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_updater::UpdaterExt;
@@ -11,22 +17,25 @@ use tauri_plugin_updater::UpdaterExt;
 struct TrayIdManager {
     id: Mutex<Option<TrayIconId>>,
 }
-impl TrayIdManager {
-    pub fn new(id: Option<TrayIconId>) -> Self {
+impl ManagerWithLock<Option<TrayIconId>> for TrayIdManager {
+    fn new(id: Option<TrayIconId>) -> Self {
         Self { id: Mutex::new(id) }
     }
-    pub fn get_id(&self) -> Option<TrayIconId> {
-        self.id.lock().unwrap().clone()
+    fn lock(&self) -> MutexGuard<Option<TrayIconId>> {
+        self.id.lock().expect("failed to lock tray id manager")
     }
 }
 struct ConfigManager {
     config: Mutex<String>,
 }
-impl ConfigManager {
-    pub fn new(string: String) -> Self {
+impl ManagerWithLock<String> for ConfigManager {
+    fn new(string: String) -> Self {
         Self {
             config: Mutex::new(string),
         }
+    }
+    fn lock(&self) -> MutexGuard<String> {
+        self.config.lock().expect("failed to lock config manager")
     }
 }
 
@@ -34,29 +43,27 @@ impl ConfigManager {
 fn hide_app(app_handle: AppHandle) {
     app_handle
         .set_activation_policy(tauri::ActivationPolicy::Accessory)
-        .unwrap();
-    let window = app_handle.get_webview_window("main").unwrap();
+        .expect("set activation policy failed.");
+    let window = app_handle
+        .get_webview_window("main")
+        .expect("failed to get window: main");
 
-    window.hide().unwrap();
+    window.hide().expect("window hide failed.");
 }
 #[tauri::command]
 fn set_schedules(schedules: Vec<Schedule>, app_handle: AppHandle) {
-    *app_handle
-        .state::<SchedulesManager>()
-        .schedules
-        .lock()
-        .unwrap() = Some(schedules);
+    *app_handle.state::<SchedulesManager>().lock() = Some(schedules);
 }
 #[tauri::command]
 fn set_config(app_handle: AppHandle, config: String) {
-    *app_handle.state::<ConfigManager>().config.lock().unwrap() = config;
+    *app_handle.state::<ConfigManager>().lock() = config;
 }
 
 fn build_tray(app_handle: &AppHandle) {
     let tray_id_manager = app_handle.state::<TrayIdManager>();
     let schedules_manager = app_handle.state::<SchedulesManager>();
 
-    if let Some(id) = tray_id_manager.get_id() {
+    if let Some(id) = tray_id_manager.lock().clone() {
         app_handle.remove_tray_by_id(&id);
     }
 
@@ -64,34 +71,39 @@ fn build_tray(app_handle: &AppHandle) {
         .text("show_app", "アプリを表示")
         .separator();
 
-    if let Some(schedules) = schedules_manager.schedules.lock().unwrap().as_ref() {
+    if let Some(schedules) = schedules_manager.lock().as_ref() {
         for menu_item in schedules {
             menu_builder = menu_builder.text(&menu_item.name, &menu_item.name);
         }
     }
 
-    let menu = menu_builder.separator().quit().build().unwrap();
+    let menu = menu_builder
+        .separator()
+        .quit()
+        .build()
+        .expect("failed to build menu");
 
     let tray = tauri::tray::TrayIconBuilder::new()
         .menu(&menu)
-        // .icon(tauri::image::Image::from_path("icons/icon.png").unwrap())
         .icon_as_template(true)
         .title("起動中...")
         .on_menu_event(|app_handle, e| match e.id().as_ref() {
             "show_app" => {
-                let window = &app_handle.get_webview_window("main").unwrap();
-                window.show().unwrap();
-                window.set_focus().unwrap();
+                let window = &app_handle
+                    .get_webview_window("main")
+                    .expect("failed to get window: main");
+                window.show().expect("failed to show window");
+                window.set_focus().expect("failed to focus window");
                 app_handle
                     .set_activation_policy(tauri::ActivationPolicy::Regular)
-                    .unwrap();
+                    .expect("failed to set activation policy")
             }
             _ => (),
         })
         .build(app_handle)
-        .unwrap();
+        .expect("failed to build tray");
 
-    *tray_id_manager.id.lock().unwrap() = Some(tray.id().clone());
+    *tray_id_manager.lock() = Some(tray.id().clone());
 }
 
 fn main() {
@@ -130,19 +142,22 @@ fn main() {
 
             #[cfg(debug_assertions)]
             {
-                handle.get_webview_window("main").unwrap().open_devtools();
+                handle
+                    .get_webview_window("main")
+                    .expect("failed to get window: main")
+                    .open_devtools();
             }
 
             #[cfg(desktop)]
             app.handle()
                 .plugin(tauri_plugin_updater::Builder::new().build())?;
 
-            let app_handle_updater = handle.clone().to_owned();
-            let app_handle_interval = handle.clone().to_owned();
+            let app_handle_updater = handle.to_owned();
+            let app_handle_interval = handle.to_owned();
 
             tauri::async_runtime::spawn(async move {
-                let app_handle = app_handle_updater.clone().to_owned();
-                let updater = app_handle.updater().unwrap();
+                let app_handle = app_handle_updater.to_owned();
+                let updater = app_handle.updater().expect("update failed");
 
                 if let Ok(Some(update)) = updater.check().await {
                     app_handle
@@ -166,18 +181,21 @@ fn main() {
                     app_handle_interval.state::<ConfigManager>().to_owned();
 
                 loop {
-                    if let Some(schedules) = schedules_manager.schedules.lock().unwrap().as_ref() {
-                        if let Some(id) = tray_id_manager.id.lock().unwrap().as_ref() {
-                            let config = config_manager.config.lock().unwrap();
+                    if let Some(schedules) = schedules_manager.lock().clone() {
+                        if let Some(id) = tray_id_manager.lock().clone() {
+                            let config = config_manager.lock();
 
-                            let tray = app_handle_interval.tray_by_id(id).unwrap();
+                            let tray = app_handle_interval
+                                .tray_by_id(&id)
+                                .expect("failed to get tray");
 
-                            let curr_option = get_closest(schedules, schedule::ClosestMode::Before);
-                            let next_option = get_closest(schedules, schedule::ClosestMode::After);
+                            let curr_option =
+                                get_closest(&schedules, schedule::ClosestMode::Before);
+                            let next_option = get_closest(&schedules, schedule::ClosestMode::After);
 
                             match &config[..] {
-                                "normal" => {
-                                    tray.set_title(Some(format!(
+                                "normal" => tray
+                                    .set_title(Some(format!(
                                         "{} ={}=> {}",
                                         if let Some(curr) = curr_option {
                                             curr.name
@@ -202,8 +220,7 @@ fn main() {
                                             "なし".to_string()
                                         }
                                     )))
-                                    .unwrap();
-                                }
+                                    .expect("failed to set title"),
                                 "compact" => {
                                     if let Some(next) = next_option {
                                         let remind_time = next.get_remind_time();
@@ -213,9 +230,10 @@ fn main() {
                                             ((remind_time as f32) / 60.0).floor(),
                                             remind_time % 60
                                         )))
-                                        .unwrap();
+                                        .expect("failed to set title");
                                     } else {
-                                        tray.set_title(Some("予定なし")).unwrap();
+                                        tray.set_title(Some("予定なし"))
+                                            .expect("failed to set title");
                                     }
                                 }
                                 _ => (),

@@ -1,6 +1,8 @@
 use chrono::Timelike;
 use chrono_tz::Asia;
-use std::sync::Mutex;
+use std::sync::{Mutex, MutexGuard};
+
+use crate::manager::ManagerWithLock;
 
 #[derive(serde::Deserialize, Clone, Debug)]
 pub struct Schedule {
@@ -34,11 +36,14 @@ pub enum ClosestMode {
 pub struct SchedulesManager {
     pub schedules: Mutex<Option<Vec<Schedule>>>,
 }
-impl SchedulesManager {
-    pub fn new(schedules: Option<Vec<Schedule>>) -> Self {
+impl ManagerWithLock<Option<Vec<Schedule>>> for SchedulesManager {
+    fn new(schedules: Option<Vec<Schedule>>) -> Self {
         Self {
             schedules: Mutex::new(schedules),
         }
+    }
+    fn lock(&self) -> MutexGuard<Option<Vec<Schedule>>> {
+        self.schedules.lock().expect("failed to lock schedules")
     }
 }
 
