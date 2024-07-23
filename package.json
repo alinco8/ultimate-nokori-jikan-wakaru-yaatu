@@ -57,7 +57,7 @@
         "eslint-plugin-react": "^7.34.4",
         "eslint-plugin-react-hooks": "^4.6.2",
         "eslint-plugin-react-refresh": "^0.4.8",
-        "framer-motion": "^11.3.4",
+        "framer-motion": "^11.3.7",
         "globals": "^15.8.0",
         "npm-run-all": "^4.1.5",
         "prettier": "^3.3.3",

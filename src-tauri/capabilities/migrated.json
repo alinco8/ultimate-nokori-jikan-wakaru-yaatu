@@ -15,6 +15,7 @@
         "updater:allow-check",
         "updater:default",
         "process:allow-restart",
-        "window:allow-hide"
+        "window:allow-hide",
+        "window:allow-start-dragging"
     ]
 }
