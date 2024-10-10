@@ -21,11 +21,9 @@
             {
                 "title": "アップデート",
                 "label": "update",
-                "width": 800,
-                "height": 600,
-                "hiddenTitle": true,
-                "titleBarStyle": "Overlay",
-                "visible": true,
+                "minWidth": 800,
+                "minHeight": 600,
+                "decorations": false,
                 "url": "/update"
             }
         ],

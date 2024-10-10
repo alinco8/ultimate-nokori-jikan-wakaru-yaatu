@@ -1,0 +1,10 @@
+html,
+body {
+    height: 100%;
+    overscroll-behavior: none;
+    /* overflow: hidden; */
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

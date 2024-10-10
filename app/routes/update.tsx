@@ -1,10 +1,10 @@
-import { AppShell, Box, Button, Card, Center, Flex } from '@mantine/core';
+import { AppShell, Button, Flex, Title } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
-import { Header, Main, WithHeader } from '~/components/Header';
+import { Header, Main } from '~/components/Header';
 import { Update } from '~/components/Update';
 
 export const meta: MetaFunction = () => {
-    return [{ title: 'Update' }, { name: 'description', content: '' }];
+    return [{ title: 'アップデート' }, { name: 'description', content: '' }];
 };
 
 const updates = [
@@ -35,9 +35,9 @@ const updates = [
 export default function UpdatePage() {
     return (
         <AppShell>
-            <Header />
             <Main>
                 <Flex direction='column' align='center'>
+                    <Title fz='3rem'>v1.0.0</Title>
                     {updates.map(update => (
                         <Update
                             w='35rem'
@@ -50,17 +50,15 @@ export default function UpdatePage() {
                 </Flex>
             </Main>
             <AppShell.Footer
-                // pos='absolute'
-                // right='0px'
-                // bottom='0px'
-                // style={{ zIndex: 100 }}
+                pos='sticky'
+                p='md'
             >
                 <Flex
                     justify={{ base: 'center' }}
                     gap={{ base: 'md', sm: 'lg' }}
                 >
-                    <Button>アップデート</Button>
-                    <Button variant='outline'>15分後に再通知</Button>
+                    <Button size='md'>アップデート</Button>
+                    <Button size='md' variant='outline'>15分後に再通知</Button>
                 </Flex>
             </AppShell.Footer>
         </AppShell>
