@@ -1,93 +1,68 @@
-import { Card, Group, ScrollArea, Title } from '@mantine/core';
+import { AppShell, Box, Button, Card, Center, Flex } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
-import { WithHeader } from '~/components/Header';
-import { Markdown } from '~/components/Markdown';
+import { Header, Main, WithHeader } from '~/components/Header';
+import { Update } from '~/components/Update';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Update' }, { name: 'description', content: '' }];
 };
 
-export default function Update() {
-    return (
-        <WithHeader>
-            <Card radius='lg' shadow='sm' padding='lg' withBorder>
-                <Group>
-                    <Title mb='md'>v1.0.0</Title>
-                    <ScrollArea h={400}>
-                        <Markdown
-                            content={`
-## ✨️ 新機能
+const updates = [
+    {
+        version: '1.1.0',
+        description: `
+## 🔧 バグ修正
 
--   機能 1
--   機能 2
--   機能 3
--   機能 4
+- アップデートボタンが反応しないバグを修正`,
+    },
+    {
+        version: '1.0.0',
+        description: `## ✨️ 新機能
+
+- 日記機能を追加
 
 ## 🔧 バグ修正
 
--   修正 1
--   修正 2
--   修正 3
--   修正 4
+- 設定ページのデザイン崩れを修正
+- アプリにしばらくフォーカスしていないと、タイマーが止まるバグを修正
 
 ## 💎 改善点
 
--   修正 1
--   修正 2
--   修正 3
--   修正 4
+- タイマーシステムのパフォーマンスを向上`,
+    },
+];
 
-# GFM
-
-Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni, nemo!
-
-## Autolink literals
-
-www.example.com, https://example.com, and contact@example.com.
-
-## Footnote
-
-## Summary
-<details>
-<summary>これは中身が整形されない</summary>
-1. 野菜**A**の皮を剥く。
-2. 乱切りにする。
-3. 調味料**B**と合わせて炒める。
-    - \`火傷\`に注意。
-</details>
-
-<details>
-<summary>これは中身が整形される</summary>
-
-1. 野菜**A**の皮を剥く。
-2. 乱切りにする。
-3. 調味料**B**と合わせて炒める。
-    - \`火傷\`に注意。
-</details>
-
-A note[^1]
-
-[^1]: Big note.
-
-## Strikethrough
-
-~one~ or ~~two~~ tildes.
-
-## Table
-
-| a | b  |  c |  d  |
-| :-: | :-: | :-: | :-: |
-| a | b  |  c |  d  |
-| a | b  |  c |  d  |
-
-## Tasklist
-
-* [ ] to do
-* [x] done`}
+export default function UpdatePage() {
+    return (
+        <AppShell>
+            <Header />
+            <Main>
+                <Flex direction='column' align='center'>
+                    {updates.map(update => (
+                        <Update
+                            w='35rem'
+                            key={update.version}
+                            version={update.version}
+                            description={update.description}
+                            mb='lg'
                         />
-                    </ScrollArea>
-                </Group>
-            </Card>
-        </WithHeader>
+                    ))}
+                </Flex>
+            </Main>
+            <AppShell.Footer
+                // pos='absolute'
+                // right='0px'
+                // bottom='0px'
+                // style={{ zIndex: 100 }}
+            >
+                <Flex
+                    justify={{ base: 'center' }}
+                    gap={{ base: 'md', sm: 'lg' }}
+                >
+                    <Button>アップデート</Button>
+                    <Button variant='outline'>15分後に再通知</Button>
+                </Flex>
+            </AppShell.Footer>
+        </AppShell>
     );
 }

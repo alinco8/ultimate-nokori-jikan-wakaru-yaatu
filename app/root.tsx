@@ -9,8 +9,7 @@ import {
 } from '@remix-run/react';
 
 import '@mantine/core/styles.css';
-import './styles.css';
-import './normalize.css';
+import './App.css';
 
 export const links: LinksFunction = () => [];
 

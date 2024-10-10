@@ -1,8 +1,0 @@
-body {
-    overscroll-behavior: none;
-    overflow: hidden;
-}
-#main {
-    height: calc(100vh - 29px);
-    overflow-y: scroll;
-}

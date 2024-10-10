@@ -1,0 +1,1 @@
+-   Markdown の絵文字を Animated Emoji または @souhaildev/reactemojis に置換

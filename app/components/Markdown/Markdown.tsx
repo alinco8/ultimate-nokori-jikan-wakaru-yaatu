@@ -1,35 +1,25 @@
-import {
-    Anchor,
-    Container,
-    Divider,
-    List,
-    Table,
-    Text,
-    Title,
-} from '@mantine/core';
-import ReactEmojis from '@souhaildev/reactemojis';
+import { Anchor, Box, Divider, List, Table, Text, Title } from '@mantine/core';
+import Emoji from '@souhaildev/reactemojis';
 import Marked, { Components } from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
-import { EmojiHandler, remarkEmojis } from '~/libs/markdown-emojis';
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 
 // mb-4 mt-6 pb-2
 const components: Components = {
     h1: ({ children }) => (
-        <Container mb='md' mt='lg' pb='sm'>
+        <Box mb='md' mt='lg' pb='sm'>
             <Title order={1}>
                 {children}
-                {/* <ReactEmojis /> */}
             </Title>
             <Divider />
-        </Container>
+        </Box>
     ),
     h2: ({ children }) => (
-        <Container mb='md' mt='lg' pb='sm'>
+        <Box mb='md' mt='lg' pb='sm'>
             <Title order={2}>{children}</Title>
             <Divider />
-        </Container>
+        </Box>
     ),
     h3: ({ children }) => (
         <>
@@ -91,13 +81,7 @@ export const Markdown = ({ content }: MarkdownProps) => {
             remarkPlugins={[
                 remarkGfm,
                 remarkBreaks,
-                remarkEmojis,
             ]}
-            remarkRehypeOptions={{
-                handlers: {
-                    emoji: EmojiHandler,
-                },
-            }}
             className={styles.markdown}
         >
             {content}
