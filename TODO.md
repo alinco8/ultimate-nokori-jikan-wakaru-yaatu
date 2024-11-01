@@ -1,1 +1,2 @@
 -   Markdown の絵文字を Animated Emoji または @souhaildev/reactemojis に置換
+-   アップデートの再起動を渋るともう一回アップデートさせられる

@@ -10,6 +10,11 @@ export default defineConfig(({ mode }) => {
             modules: {
                 localsConvention: 'camelCaseOnly',
             },
+            preprocessorOptions: {
+                scss: {
+                    additionalData: `@import "./app/_mantine";`,
+                },
+            },
         },
     };
 });

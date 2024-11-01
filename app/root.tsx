@@ -7,6 +7,7 @@ import {
     Scripts,
     ScrollRestoration,
 } from '@remix-run/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import '@mantine/core/styles.css';
 import './App.scss';
@@ -27,9 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ColorSchemeScript />
             </head>
             <body>
-                <MantineProvider defaultColorScheme='auto'>
-                    {children}
-                </MantineProvider>
+                {children}
                 <ScrollRestoration />
                 <Scripts />
             </body>
@@ -38,5 +37,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    return <Outlet />;
+    const queryClient = new QueryClient();
+
+    return (
+        <MantineProvider defaultColorScheme='auto'>
+            <QueryClientProvider client={queryClient}>
+                <Outlet />
+            </QueryClientProvider>
+        </MantineProvider>
+    );
 }

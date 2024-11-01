@@ -1,5 +1,5 @@
 {
-    "include": ["env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/*.tsx"],
+    "include": ["env.d.ts", "app/**/*.ts", "app/**/*.tsx", ".storybook/*.tsx"],
     "compilerOptions": {
         "lib": ["DOM", "DOM.Iterable", "ES2022"],
         "types": ["@remix-run/node", "vite/client"],
