@@ -42,6 +42,7 @@ impl Default for AppConfig {
     }
 }
 
+#[derive(Debug)]
 pub struct ConfigManager<'a> {
     config: LogMutex<AppConfig>,
     pub config_path: PathBuf,
