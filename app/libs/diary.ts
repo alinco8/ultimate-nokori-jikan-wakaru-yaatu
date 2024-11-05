@@ -4,7 +4,7 @@ import { format, differenceInCalendarDays } from 'date-fns';
 export async function getDiary() {
     const config = await invoke('get_config');
     await invoke('set_config', {
-        config: {
+        newConfig: {
             ...config,
             gas_url:
                 'https://script.google.com/macros/s/AKfycbwIyttpQFg27Wkw5v1SQpm1pnoBIHrcdvHgb4vbrHw5eF5iIcBRXSe_jICKtVXJcbR0DQ/exec?sheet=日誌・自主学習&range=B7:F506',

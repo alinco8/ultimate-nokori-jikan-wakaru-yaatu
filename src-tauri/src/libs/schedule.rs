@@ -5,8 +5,10 @@ use std::{
     error::Error,
     fmt::{Debug, Display},
 };
+use ts_rs::TS;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, TS)]
+#[ts(export, export_to = "type.d.ts")]
 pub struct Schedules {
     schedules: BTreeSet<Schedule>,
 }
@@ -52,13 +54,78 @@ impl Schedules {
         })
     }
 }
+impl Default for Schedules {
+    fn default() -> Self {
+        Self {
+            schedules: BTreeSet::from([
+                Schedule {
+                    name: "朝礼".to_string(),
+                    time: ScheduleTime::new(Some(09), 31, 00),
+                },
+                Schedule {
+                    name: "1限目".to_string(),
+                    time: ScheduleTime::new(Some(09), 45, 00),
+                },
+                Schedule {
+                    name: "休憩1".to_string(),
+                    time: ScheduleTime::new(Some(10), 35, 00),
+                },
+                Schedule {
+                    name: "2限目".to_string(),
+                    time: ScheduleTime::new(Some(10), 45, 00),
+                },
+                Schedule {
+                    name: "休憩2".to_string(),
+                    time: ScheduleTime::new(Some(11), 35, 00),
+                },
+                Schedule {
+                    name: "3限目".to_string(),
+                    time: ScheduleTime::new(Some(11), 45, 00),
+                },
+                Schedule {
+                    name: "昼休憩".to_string(),
+                    time: ScheduleTime::new(Some(12), 35, 00),
+                },
+                Schedule {
+                    name: "4限目".to_string(),
+                    time: ScheduleTime::new(Some(13), 15, 00),
+                },
+                Schedule {
+                    name: "休憩4".to_string(),
+                    time: ScheduleTime::new(Some(14), 05, 00),
+                },
+                Schedule {
+                    name: "5限目".to_string(),
+                    time: ScheduleTime::new(Some(14), 15, 00),
+                },
+                Schedule {
+                    name: "休憩5".to_string(),
+                    time: ScheduleTime::new(Some(15), 05, 00),
+                },
+                Schedule {
+                    name: "6限目".to_string(),
+                    time: ScheduleTime::new(Some(15), 15, 00),
+                },
+                Schedule {
+                    name: "終礼".to_string(),
+                    time: ScheduleTime::new(Some(16), 05, 00),
+                },
+                Schedule {
+                    name: "放課後".to_string(),
+                    time: ScheduleTime::new(Some(16), 15, 00),
+                },
+            ]),
+        }
+    }
+}
 
 pub enum ClosestScheduleMode {
     Current,
     Next,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize, TS)]
+#[ts(export, export_to = "type.d.ts")]
 pub struct Schedule {
     pub name: String,
     pub time: ScheduleTime,
@@ -87,7 +154,8 @@ impl Display for Schedule {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, TS)]
+#[ts(export, export_to = "type.d.ts")]
 pub struct ScheduleTime {
     pub hour: Option<u32>,
     pub minute: u32,

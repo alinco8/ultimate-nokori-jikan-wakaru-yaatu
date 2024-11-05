@@ -1,4 +1,3 @@
-use crate::libs::log::LogMutex;
 use crate::libs::schedule::{ScheduleTime, Schedules};
 use handlebars::{RenderError, RenderErrorReason};
 use serde::{Deserialize, Serialize};
@@ -7,11 +6,11 @@ use std::error::Error;
 use std::time::Duration;
 use std::{fs, ops::Deref, path::PathBuf};
 use tauri::{AppHandle, Manager};
-use tokio::sync::MutexGuard;
+use tokio::sync::{Mutex, MutexGuard};
 use tokio::time::timeout;
+use ts_rs::TS;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-// #[ts(export, export_to = "greet.ts")]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
 pub struct AppConfig {
     #[serde(flatten, default)]
     pub schedules: Schedules,
@@ -44,12 +43,12 @@ impl Default for AppConfig {
 
 #[derive(Debug)]
 pub struct ConfigManager<'a> {
-    config: LogMutex<AppConfig>,
+    config: Mutex<AppConfig>,
     pub config_path: PathBuf,
-    handlebars: LogMutex<handlebars::Handlebars<'a>>,
+    handlebars: Mutex<handlebars::Handlebars<'a>>,
 }
 impl<'a> ConfigManager<'a> {
-    pub async fn new(app: AppHandle) -> Self {
+    pub fn new(app: AppHandle) -> Self {
         let config_dir = app.path().app_config_dir().unwrap();
         let config_path = config_dir.join("config.json");
 
@@ -70,9 +69,9 @@ impl<'a> ConfigManager<'a> {
         }
 
         Self {
-            config: LogMutex::new(config),
+            config: Mutex::new(config),
             config_path,
-            handlebars: LogMutex::new(hb),
+            handlebars: Mutex::new(hb),
         }
     }
 
@@ -101,22 +100,18 @@ impl<'a> ConfigManager<'a> {
     }
 
     pub async fn lock_config(&self) -> MutexGuard<'_, AppConfig> {
-        println!("Locking config");
         let value = match timeout(Duration::from_secs(3), self.config.lock()).await {
             Ok(value) => value,
             Err(err) => panic!("{}", err),
         };
-        println!("Locked config");
 
         value
     }
     pub async fn lock_handlebars(&self) -> MutexGuard<'_, handlebars::Handlebars<'a>> {
-        println!("Locking handlebars");
         let value = match timeout(Duration::from_secs(3), self.handlebars.lock()).await {
             Ok(value) => value,
             Err(err) => panic!("{}", err),
         };
-        println!("Locked handlebars");
 
         value
     }
@@ -133,8 +128,6 @@ pub fn remind_time_helper<'reg, 'rc>(
         .param(0)
         .ok_or(RenderErrorReason::ParamNotFoundForIndex("let", 2))?;
 
-    println!("{:?}", param.value());
-
     let time = serde_json::from_value::<ScheduleTime>(param.value().clone())
         .map_err(|_| RenderErrorReason::InvalidParamType("ScheduleTime"))?;
 
@@ -144,7 +137,5 @@ pub fn remind_time_helper<'reg, 'rc>(
 }
 
 pub fn setup(app: &AppHandle) {
-    println!("managing config manager");
     app.manage(ConfigManager::new(app.clone()));
-    println!("manage config manager");
 }

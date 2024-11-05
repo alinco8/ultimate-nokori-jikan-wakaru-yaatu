@@ -1,5 +1,6 @@
 import { Box, BoxProps, Card, Title } from '@mantine/core';
 import { Markdown } from '~/components/Markdown';
+import {} from '@tauri-apps/api/app';
 
 export interface UpdateProps {
     version: string;

@@ -14,15 +14,20 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle();
 
-            handle
-                .get_webview_window("main")
-                .unwrap()
-                .on_window_event(|ev| match ev {
-                    tauri::WindowEvent::CloseRequested { api, .. } => {
-                        api.prevent_close();
-                    }
-                    _ => (),
-                });
+            {
+                let handle = handle.clone();
+                handle
+                    .get_webview_window("main")
+                    .unwrap()
+                    .on_window_event(move |ev| match ev {
+                        tauri::WindowEvent::CloseRequested { api, .. } => {
+                            api.prevent_close();
+
+                            handle.get_webview_window("main").unwrap().hide().unwrap();
+                        }
+                        _ => (),
+                    });
+            }
 
             features::setup(&handle);
 
@@ -33,8 +38,16 @@ pub fn run() {
         .expect("error while running tauri application")
         .run(|app, event| match event {
             tauri::RunEvent::ExitRequested { .. } => {
-                println!("state from exit_requested");
+                println!("exit requested");
                 let _ = app.state::<ConfigManager>().save();
+            }
+            tauri::RunEvent::Reopen {
+                has_visible_windows,
+                ..
+            } => {
+                if !has_visible_windows {
+                    app.get_webview_window("main").unwrap().show().unwrap();
+                }
             }
             _ => (),
         });

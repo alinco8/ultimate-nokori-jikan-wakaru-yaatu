@@ -56,6 +56,7 @@ export default [
             'react/jsx-props-no-spreading': 'off',
             'react/forbid-component-props': 'off',
             'react/jsx-indent': 'off',
+            '@typescript-eslint/no-dynamic-delete': 'off',
         },
     },
 ];

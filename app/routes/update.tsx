@@ -1,58 +1,47 @@
-import { AppShell, Button, Flex, Title } from '@mantine/core';
+import { AppShell, Button, Flex, Loader } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
+import { IconLadder, IconLoader } from '@tabler/icons-react';
 import { emit } from '@tauri-apps/api/event';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
-import { memo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Main } from '~/components/Header';
 import { Update } from '~/components/Update';
 import { UpdateModal, UpdateModalState } from '~/components/UpdateModal';
-import { useAppVersion } from '~/hooks/useAppVersion';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'アップデート' }, { name: 'description', content: '' }];
 };
 
-const updates = [
-    {
-        version: '1.1.0',
-        description: `
-## 🔧 バグ修正
-
-- バグXXXXXを修正`,
-    },
-    {
-        version: '1.0.0',
-        description: `## ✨️ 新機能
-
-- 機能XXXXを追加
-
-## 🔧 バグ修正
-
-- XXXXXを修正
-- XXXXXを修正
-
-## 💎 改善点
-
-- XXXXXXXXのパフォーマンスを向上`,
-    },
-];
+interface Update {
+    notes: string;
+    pub_date: string;
+    signature: string;
+    url: string;
+    version: string;
+}
 
 export default function UpdatePage() {
-    const [showLatestVersion, setShowLatestVersion] = useState(false);
-    const appVersion = useAppVersion();
-    const latestAppVersion = updates[0].version;
-    const VersionTitle = memo((
-        { opacity, value }: { opacity: number; value: string },
-    ) => (
-        <Title opacity={opacity} style={{ transition: 'opacity 1s' }}>
-            {value}
-        </Title>
-    ));
-    VersionTitle.displayName = 'VersionTitle';
     const [updateState, setUpdateState] = useState<UpdateModalState | null>(
         null,
     );
+    const [updates, setUpdates] = useState<Update[] | null>(null);
+
+    useEffect(() => {
+        void (async () => {
+            const params = new URLSearchParams(location.search);
+            const curr = params.get('current');
+            const next = params.get('next');
+
+            if (!curr || !next) return;
+
+            const updates = await (await fetch(
+                `https://free-joceline-alinco8-9535565b.koyeb.app/releases/descriptions?start=${curr}&end=${next}`,
+            )).json() as Update[];
+
+            setUpdates(updates);
+        })();
+    }, []);
 
     const update = async () => {
         setUpdateState({ state: 'CheckingUpdate' });
@@ -89,7 +78,7 @@ export default function UpdatePage() {
                         break;
                 }
             });
-            // await relaunch();
+            await relaunch();
         }
     };
 
@@ -108,15 +97,17 @@ export default function UpdatePage() {
                     />
                 )}
                 <Flex direction='column' align='center' mt='lg'>
-                    {updates.map(update => (
-                        <Update
-                            w='35rem'
-                            key={update.version}
-                            version={update.version}
-                            description={update.description}
-                            mb='lg'
-                        />
-                    ))}
+                    {updates
+                        ? updates.map(update => (
+                            <Update
+                                w='35rem'
+                                key={update.version}
+                                version={update.version}
+                                description={update.notes}
+                                mb='lg'
+                            />
+                        ))
+                        : <Loader />}
                 </Flex>
             </Main>
             <AppShell.Footer
@@ -132,7 +123,6 @@ export default function UpdatePage() {
                     <Button
                         size='md'
                         onClick={() => {
-                            setShowLatestVersion(true);
                             void update();
                         }}
                     >

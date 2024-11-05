@@ -1,7 +1,10 @@
+import type { AppConfig } from '../src-tauri/bindings/greet';
+
 declare namespace Commands {
     export interface Commands {
-        get_config(): Config;
-        set_config(config: Config): void;
+        get_config(): AppConfig;
+        set_config(args: { newConfig: AppConfig }): void;
+        update_tray(): void;
     }
 
     interface Config {
