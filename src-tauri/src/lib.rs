@@ -1,16 +1,16 @@
 mod features;
 mod libs;
 
-use features::{commands::generate_handler, config::ConfigManager};
+use features::commands;
+use features::config::ConfigManager;
 use log::trace;
-use tauri::Manager;
+use tauri::{generate_context, Manager};
 
 pub fn run() {
     trace!("running tauri application");
 
     tauri::Builder::default()
         .plugin(tauri_plugin_process::init())
-        .invoke_handler(generate_handler())
         .setup(|app| {
             let handle = app.handle();
 
@@ -28,10 +28,12 @@ pub fn run() {
 
             Ok(())
         })
-        .build(tauri::generate_context!())
+        .invoke_handler(commands::generate_handler())
+        .build(generate_context!())
         .expect("error while running tauri application")
         .run(|app, event| match event {
             tauri::RunEvent::ExitRequested { .. } => {
+                println!("state from exit_requested");
                 let _ = app.state::<ConfigManager>().save();
             }
             _ => (),

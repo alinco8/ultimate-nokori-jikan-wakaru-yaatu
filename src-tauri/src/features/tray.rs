@@ -1,7 +1,7 @@
-use super::config::{ConfigManager, ScheduleMode};
-use crate::libs::schedule::ClosestScheduleMode;
+use super::config::ConfigManager;
+use crate::libs::schedule::{ClosestScheduleMode, Schedule};
 use chrono::Local;
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use tauri::{
     tray::{TrayIcon, TrayIconBuilder},
     AppHandle, Manager,
@@ -19,60 +19,40 @@ pub fn setup(app: &AppHandle) {
     }
 }
 pub async fn tray_thread(app: &AppHandle, tray: &TrayIcon) {
-    let schedules_manager = app.state::<ConfigManager>();
+    println!("state from tray_thread");
+    let config_manager = app.state::<ConfigManager>();
+    let mut data = HashMap::<&str, Option<Schedule>>::new();
 
     loop {
-        let config = schedules_manager.config.lock().await;
-        let schedules = &config.schedules;
+        {
+            let config = config_manager.lock_config().await;
+            let hb = config_manager.lock_handlebars().await;
+            let schedules = &config.schedules;
 
-        tray.set_title(Some(match config.mode {
-            ScheduleMode::Compact => {
-                match (
-                    schedules
-                        .get_closest_schedule(ClosestScheduleMode::Current)
-                        .await
-                        .map_err(|err| err.to_string())
-                        .unwrap(),
-                    schedules
-                        .get_closest_schedule(ClosestScheduleMode::Next)
-                        .await
-                        .map_err(|err| err.to_string())
-                        .unwrap(),
-                ) {
-                    (None, None) => format!("(´-﹃-`)"),
-                    (Some(curr), None) => format!("{}| _(:3」∠)_", curr.name),
-                    (None, Some(next)) | (Some(_), Some(next)) => {
-                        format!("{}| {}", next.time.remind_time(), next.name)
-                    }
+            data.insert(
+                "curr",
+                schedules
+                    .get_closest_schedule(ClosestScheduleMode::Current)
+                    .await
+                    .unwrap(),
+            );
+            data.insert(
+                "next",
+                schedules
+                    .get_closest_schedule(ClosestScheduleMode::Next)
+                    .await
+                    .unwrap(),
+            );
+
+            match hb.render(&config.current_formatter, &data) {
+                Ok(title) => {
+                    tray.set_title(Some(title)).unwrap();
+                }
+                Err(err) => {
+                    println!("{}", err);
                 }
             }
-            ScheduleMode::Normal => {
-                match (
-                    schedules
-                        .get_closest_schedule(ClosestScheduleMode::Current)
-                        .await
-                        .map_err(|err| err.to_string())
-                        .unwrap(),
-                    schedules
-                        .get_closest_schedule(ClosestScheduleMode::Next)
-                        .await
-                        .map_err(|err| err.to_string())
-                        .unwrap(),
-                ) {
-                    (None, None) => format!("(´-﹃-`)"),
-                    (None, Some(next)) => format!("=> {} {}", next.time.remind_time(), next.name),
-                    (Some(curr), None) => format!("{} {} => _(:3」∠)_", curr.time, curr.name),
-                    (Some(curr), Some(next)) => format!(
-                        "{} {} => {} {}",
-                        curr.time,
-                        curr.name,
-                        next.time.remind_time(),
-                        next.name
-                    ),
-                }
-            }
-        }))
-        .unwrap();
+        }
 
         wait_next_second().await;
     }
