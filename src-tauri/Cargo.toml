@@ -1,6 +1,6 @@
 [package]
 name = "uljika"
-version = "2.0.1"
+version = "2.1.0"
 authors = ["Alinco8"]
 edition = "2021"
 description = "Ultimate Nokori Jikan Wakaru Yaatu"
