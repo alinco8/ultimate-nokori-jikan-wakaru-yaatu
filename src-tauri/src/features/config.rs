@@ -29,11 +29,11 @@ impl Default for AppConfig {
             formatter: HashMap::from([
                 (
                     "compact".to_string(),
-                    "{{next.time}}| {{next.name}}".to_string(),
+                    "{{#if next}} {{next.time}}| {{next.name}} {{else}} (´-﹃-`) {{/if}}".to_string(),
                 ),
                 (
                     "normal".to_string(),
-                    "{{curr.time}}| {{curr.name}} => {{next.time}}| {{next.name}}".to_string(),
+                    "{{#if curr}} {{curr.time}}| {{curr.name}} {{else}} _(:3」∠)_ {{curr.time}}| {{curr.name}} {{/if}} => {{#if next}} {{remind_time next.time}}| {{next.name}} {{else}} (¦3[▓▓] {{/if}}".to_string(),
                 ),
             ]),
             current_formatter: "normal".to_string(),
