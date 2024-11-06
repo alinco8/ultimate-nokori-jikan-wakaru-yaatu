@@ -1,6 +1,5 @@
 import { AppShell, Button, Flex, Loader } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
-import { IconLadder, IconLoader } from '@tabler/icons-react';
 import { emit } from '@tauri-apps/api/event';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';

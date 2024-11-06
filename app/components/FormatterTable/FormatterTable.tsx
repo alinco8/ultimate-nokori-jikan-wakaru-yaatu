@@ -1,12 +1,4 @@
-import {
-    ActionIcon,
-    Center,
-    Input,
-    Radio,
-    Table,
-    Tooltip,
-} from '@mantine/core';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { Radio, Stack } from '@mantine/core';
 import type { AppConfig } from 'src-tauri/bindings/greet';
 
 export interface FormatterTableProps {
@@ -15,9 +7,6 @@ export interface FormatterTableProps {
     readonly disabled?: boolean;
 
     onCurrentChange: (name: string) => void;
-    onAdd: () => void;
-    onDelete: (name: string) => void;
-    onNameChange: (name: string, newName: string) => void;
 }
 
 export const FormatterTable = (
@@ -26,9 +15,6 @@ export const FormatterTable = (
         current,
         disabled,
         onCurrentChange,
-        onAdd,
-        onDelete,
-        onNameChange,
     }: FormatterTableProps,
 ) => {
     return (
@@ -37,60 +23,19 @@ export const FormatterTable = (
             key={current}
             onChange={onCurrentChange}
         >
-            <Table>
-                <Table.Tbody>
-                    {Object.entries(formatter).flatMap(([name, value]) => (
-                        typeof value === 'undefined'
-                            ? []
-                            : (
-                                <Table.Tr key={name}>
-                                    <Table.Td>
-                                        <Radio
-                                            disabled={disabled}
-                                            value={name}
-                                        />
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Input
-                                            onBlur={(event) => {
-                                                onNameChange(
-                                                    name,
-                                                    event.currentTarget.value,
-                                                );
-                                            }}
-                                            disabled={disabled}
-                                            defaultValue={name}
-                                        />
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Tooltip label='一つしかない場合は消せません'>
-                                            <ActionIcon
-                                                variant='transparent'
-                                                color='red'
-                                                onClick={() => {
-                                                    onDelete(name);
-                                                }}
-                                                disabled={Object.keys(formatter)
-                                                    .length === 1}
-                                            >
-                                                <IconTrash />
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    </Table.Td>
-                                </Table.Tr>
-                            )
-                    ))}
-                    <Table.Tr>
-                        <Table.Td colSpan={3}>
-                            <Center>
-                                <ActionIcon size='lg' onClick={onAdd}>
-                                    <IconPlus />
-                                </ActionIcon>
-                            </Center>
-                        </Table.Td>
-                    </Table.Tr>
-                </Table.Tbody>
-            </Table>
+            <Stack>
+                {Object.entries(formatter).flatMap(([name, value]) => (
+                    typeof value === 'undefined'
+                        ? []
+                        : (
+                            <Radio
+                                disabled={disabled}
+                                value={name}
+                                label={name}
+                            />
+                        )
+                ))}
+            </Stack>
         </Radio.Group>
     );
 };

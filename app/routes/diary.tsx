@@ -1,8 +1,8 @@
 import { Button, Container, Title } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { WithHeader } from '~/components/Header';
-import { calcTodayDiaryCell, getDiary } from '~/libs/diary';
+import { calcTodayDiaryCell } from '~/libs/diary';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'アップデート' }, { name: 'description', content: '' }];

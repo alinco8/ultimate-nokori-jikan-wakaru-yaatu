@@ -10,6 +10,10 @@ pub fn run() {
     trace!("running tauri application");
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
         .plugin(tauri_plugin_process::init())
         .setup(|app| {
             let handle = app.handle();

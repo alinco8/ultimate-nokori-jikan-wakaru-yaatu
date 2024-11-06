@@ -9,5 +9,18 @@ export default {
 type Story = StoryObj<typeof FormatterTable>;
 
 export const Primary: Story = {
-    args: {},
+    args: {
+        formatter: {
+            'formatter1': 'formatter1',
+            'formatter2': 'formatter2',
+            'formatter3': 'formatter3',
+        },
+        current: 'formatter1',
+
+        disabled: false,
+
+        onCurrentChange: (name: string) => {
+            console.log(name);
+        },
+    },
 };
