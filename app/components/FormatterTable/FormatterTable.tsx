@@ -22,7 +22,6 @@ export const FormatterTable = (
             defaultValue={current}
             key={current}
             onChange={onCurrentChange}
-            m='md'
         >
             <Stack>
                 {Object.entries(formatter).flatMap(([name, value]) => (

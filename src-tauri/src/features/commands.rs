@@ -40,7 +40,22 @@ async fn update_tray(app: AppHandle) -> Result<(), String> {
 
     Ok(())
 }
+#[tauri::command]
+async fn reset_config(app: AppHandle) -> Result<(), String> {
+    let config_manager = app.state::<ConfigManager>();
+
+    {
+        *config_manager.lock_config().await = AppConfig::default()
+    }
+
+    let tray_id_manager = app.state::<TrayIdManager>();
+    let mut data = HashMap::<&str, Option<Schedule>>::new();
+    let tray = app.tray_by_id(&tray_id_manager.id).unwrap();
+    super::tray::update_tray(&config_manager, &mut data, &tray).await;
+
+    Ok(())
+}
 
 pub fn generate_handler() -> impl Fn(Invoke) -> bool {
-    generate_handler![get_config, set_config, update_tray]
+    generate_handler![get_config, set_config, update_tray, reset_config]
 }

@@ -5,6 +5,7 @@ declare namespace Commands {
         get_config(): AppConfig;
         set_config(args: { newConfig: AppConfig }): void;
         update_tray(): void;
+        reset_config(): void;
     }
 
     interface Config {

@@ -1,4 +1,13 @@
-import { Accordion, Checkbox, Container, Skeleton, Title } from '@mantine/core';
+import {
+    Accordion,
+    Button,
+    Center,
+    Checkbox,
+    Container,
+    Skeleton,
+    Stack,
+    Title,
+} from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
 import { useEffect, useState } from 'react';
 import { FormatterTable } from '~/components/FormatterTable';
@@ -33,38 +42,44 @@ export default function Index() {
                         defaultValue={['basic']}
                     >
                         <SettingItem title='基本設定' order={2} value='basic'>
-                            <Title order={3}>Formatter</Title>
-                            {config
-                                ? (
-                                    <FormatterTable
-                                        disabled={promise}
-                                        formatter={config.formatter}
-                                        current={config
-                                            .current_formatter}
-                                        onCurrentChange={(name) => {
-                                            void (async () => {
-                                                setPromise(true);
-                                                config
-                                                    .current_formatter = name;
+                            <Stack>
+                                <Title order={3}>Formatter</Title>
+                                <Stack>
+                                    {config
+                                        ? (
+                                            <FormatterTable
+                                                disabled={promise}
+                                                formatter={config.formatter}
+                                                current={config
+                                                    .current_formatter}
+                                                onCurrentChange={(name) => {
+                                                    void (async () => {
+                                                        setPromise(true);
+                                                        config
+                                                            .current_formatter =
+                                                                name;
 
-                                                setConfig(config);
+                                                        setConfig(config);
 
-                                                await invoke(
-                                                    'set_config',
-                                                    {
-                                                        newConfig: config,
-                                                    },
-                                                );
-                                                await invoke(
-                                                    'update_tray',
-                                                );
-                                            })().finally(() => {
-                                                setPromise(false);
-                                            });
-                                        }}
-                                    />
-                                )
-                                : <Skeleton />}
+                                                        await invoke(
+                                                            'set_config',
+                                                            {
+                                                                newConfig:
+                                                                    config,
+                                                            },
+                                                        );
+                                                        await invoke(
+                                                            'update_tray',
+                                                        );
+                                                    })().finally(() => {
+                                                        setPromise(false);
+                                                    });
+                                                }}
+                                            />
+                                        )
+                                        : <Skeleton />}
+                                </Stack>
+                            </Stack>
                         </SettingItem>
 
                         <SettingItem
@@ -72,7 +87,26 @@ export default function Index() {
                             order={2}
                             value='advanced'
                         >
-                            <Checkbox label='Formatterのカスタマイズ' />
+                            <Stack>
+                                <Checkbox label='Formatterのカスタマイズ' />
+                                <Center>
+                                    <Button
+                                        onClick={() => {
+                                            void (async () => {
+                                                setPromise(true);
+                                                await invoke('reset_config');
+                                                setConfig(
+                                                    await invoke('get_config'),
+                                                );
+                                            })().finally(() => {
+                                                setPromise(false);
+                                            });
+                                        }}
+                                    >
+                                        設定のリセット
+                                    </Button>
+                                </Center>
+                            </Stack>
                         </SettingItem>
                     </Accordion>
                 </Container>
