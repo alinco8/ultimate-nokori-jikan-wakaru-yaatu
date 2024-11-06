@@ -22,6 +22,7 @@ export const FormatterTable = (
             defaultValue={current}
             key={current}
             onChange={onCurrentChange}
+            m='md'
         >
             <Stack>
                 {Object.entries(formatter).flatMap(([name, value]) => (
@@ -29,6 +30,7 @@ export const FormatterTable = (
                         ? []
                         : (
                             <Radio
+                                key={name}
                                 disabled={disabled}
                                 value={name}
                                 label={name}

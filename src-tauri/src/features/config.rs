@@ -24,7 +24,7 @@ pub struct AppConfig {
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
-            schedules: Schedules::new(),
+            schedules: Schedules::default(),
             gas_url: None,
             formatter: HashMap::from([
                 (
