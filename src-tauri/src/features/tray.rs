@@ -1,10 +1,12 @@
 use super::config::ConfigManager;
 use crate::libs::schedule::{ClosestScheduleMode, Schedule};
 use chrono::Local;
+use log::error;
 use std::{collections::HashMap, time::Duration};
 use tauri::{
+    menu::MenuBuilder,
     tray::{TrayIcon, TrayIconBuilder, TrayIconId},
-    AppHandle, Manager, State,
+    ActivationPolicy, AppHandle, Manager, State,
 };
 use tokio::time::sleep;
 
@@ -14,7 +16,24 @@ pub struct TrayIdManager {
 }
 
 pub fn setup(app: &AppHandle) {
-    let tray = TrayIconBuilder::new().build(app).unwrap();
+    let menu = MenuBuilder::new(app)
+        .text("show", "アプリを表示")
+        .separator()
+        .quit_with_text("終了")
+        .build()
+        .unwrap();
+    let tray = TrayIconBuilder::new().menu(&menu).build(app).unwrap();
+
+    app.on_menu_event(|app, event| {
+        if event.id == "show" {
+            let main = app.get_webview_window("main").unwrap();
+            main.show().unwrap();
+            main.set_focus().unwrap();
+
+            app.set_activation_policy(ActivationPolicy::Regular)
+                .unwrap();
+        }
+    });
 
     app.manage(TrayIdManager {
         id: tray.id().clone(),
@@ -70,7 +89,8 @@ pub async fn update_tray(
             tray.set_title(Some(title)).unwrap();
         }
         Err(err) => {
-            println!("{}", err);
+            error!("{}", err);
+            tray.set_title(Some("Error")).unwrap();
         }
     }
 }

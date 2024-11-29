@@ -8,18 +8,11 @@ use std::{
 use ts_rs::TS;
 
 #[derive(Debug, Clone, Deserialize, Serialize, TS)]
-#[ts(export, export_to = "type.d.ts")]
 pub struct Schedules {
     schedules: BTreeSet<Schedule>,
 }
 
 impl Schedules {
-    pub fn new() -> Self {
-        Self {
-            schedules: BTreeSet::new(),
-        }
-    }
-
     pub async fn get_closest_schedule(
         &self,
         mode: ClosestScheduleMode,

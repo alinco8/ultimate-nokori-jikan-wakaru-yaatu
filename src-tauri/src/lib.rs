@@ -28,6 +28,10 @@ pub fn run() {
                             api.prevent_close();
 
                             handle.get_webview_window("main").unwrap().hide().unwrap();
+                            handle
+                                .set_activation_policy(tauri::ActivationPolicy::Accessory)
+                                .unwrap();
+                            // もしかしたらtauri::ActivationPolicy::Prohibitedの方がいいかもしれない
                         }
                         _ => (),
                     });

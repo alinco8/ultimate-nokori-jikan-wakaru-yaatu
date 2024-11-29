@@ -1,7 +1,8 @@
 use crate::libs::schedule::{ScheduleTime, Schedules};
 use handlebars::{RenderError, RenderErrorReason};
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Deserializer, Serialize};
+use serde_json::Value;
 use std::error::Error;
 use std::time::Duration;
 use std::{fs, ops::Deref, path::PathBuf};
@@ -10,23 +11,43 @@ use tokio::sync::{Mutex, MutexGuard};
 use tokio::time::timeout;
 use ts_rs::TS;
 
+fn ok_or_default<'de, T, D>(deserializer: D) -> Result<T, D::Error>
+where
+    T: DeserializeOwned + Default,
+    D: Deserializer<'de>,
+{
+    let v: Value = Deserialize::deserialize(deserializer)?;
+    Ok(T::deserialize(v).unwrap_or_default())
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 pub struct AppConfig {
     #[serde(flatten, default)]
+    #[serde(deserialize_with = "ok_or_default")]
     pub schedules: Schedules,
+
     #[serde(default)]
+    #[serde(deserialize_with = "ok_or_default")]
     pub gas_url: Option<String>,
+
     #[serde(default)]
-    pub formatter: HashMap<String, String>,
+    #[serde(deserialize_with = "ok_or_default")]
+    pub formatter: Vec<(String, String)>,
+
     #[serde(default)]
+    #[serde(deserialize_with = "ok_or_default")]
     pub current_formatter: String,
+
+    #[serde(default)]
+    #[serde(deserialize_with = "ok_or_default")]
+    pub advanced: bool,
 }
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             schedules: Schedules::default(),
             gas_url: None,
-            formatter: HashMap::from([
+            formatter: vec![
                 (
                     "compact".to_string(),
                     "{{#if next}} {{next.time}}| {{next.name}} {{else}} (´-﹃-`) {{/if}}".to_string(),
@@ -35,8 +56,9 @@ impl Default for AppConfig {
                     "normal".to_string(),
                     "{{#if curr}} {{curr.time}}| {{curr.name}} {{else}} _(:3」∠)_ {{curr.time}}| {{curr.name}} {{/if}} => {{#if next}} {{remind_time next.time}}| {{next.name}} {{else}} (¦3[▓▓] {{/if}}".to_string(),
                 ),
-            ]),
+            ],
             current_formatter: "normal".to_string(),
+            advanced: false,
         }
     }
 }
@@ -53,7 +75,13 @@ impl<'a> ConfigManager<'a> {
         let config_path = config_dir.join("config.json");
 
         let config = if fs::exists(&config_path).unwrap() {
-            serde_json::from_slice::<AppConfig>(&fs::read(&config_path).unwrap()).unwrap()
+            if let Ok(config) =
+                serde_json::from_slice::<AppConfig>(&fs::read(&config_path).unwrap())
+            {
+                config
+            } else {
+                AppConfig::default()
+            }
         } else {
             AppConfig::default()
         };
