@@ -50,7 +50,7 @@ impl Default for AppConfig {
             formatter: vec![
                 (
                     "compact".to_string(),
-                    "{{#if next}} {{next.time}}| {{next.name}} {{else}} (´-﹃-`) {{/if}}".to_string(),
+                    "{{#if next}} {{remind_time next.time}}| {{next.name}} {{else}} (´-﹃-`) {{/if}}".to_string(),
                 ),
                 (
                     "normal".to_string(),
