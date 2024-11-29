@@ -3,12 +3,15 @@
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { Decorator } from '@storybook/react';
 
 export const decorators: Decorator[] = [
     (Story) => (
         <MantineProvider>
-            <Story />
+            <ModalsProvider>
+                <Story />
+            </ModalsProvider>
         </MantineProvider>
     ),
 ];

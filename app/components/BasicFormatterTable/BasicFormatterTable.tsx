@@ -1,7 +1,7 @@
 import { Radio, Stack } from '@mantine/core';
 import type { AppConfig } from 'src-tauri/bindings/greet';
 
-export interface FormatterTableProps {
+export interface BasicFormatterTableProps {
     readonly formatter: AppConfig['formatter'];
     readonly current: AppConfig['current_formatter'];
     readonly disabled?: boolean;
@@ -9,13 +9,13 @@ export interface FormatterTableProps {
     onCurrentChange: (name: string) => void;
 }
 
-export const FormatterTable = (
+export const BasicFormatterTable = (
     {
         formatter,
         current,
         disabled,
         onCurrentChange,
-    }: FormatterTableProps,
+    }: BasicFormatterTableProps,
 ) => {
     return (
         <Radio.Group
@@ -24,7 +24,7 @@ export const FormatterTable = (
             onChange={onCurrentChange}
         >
             <Stack>
-                {Object.entries(formatter).flatMap(([name, value]) => (
+                {formatter.flatMap(([name, value]) => (
                     typeof value === 'undefined'
                         ? []
                         : (

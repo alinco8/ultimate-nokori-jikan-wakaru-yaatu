@@ -1,6 +1,5 @@
 import {
     Accordion,
-    Button,
     Center,
     Checkbox,
     Container,
@@ -10,7 +9,8 @@ import {
 } from '@mantine/core';
 import type { MetaFunction } from '@remix-run/node';
 import { useEffect, useState } from 'react';
-import { FormatterTable } from '~/components/FormatterTable';
+import { BasicFormatterTable } from '~/components/BasicFormatterTable';
+import { ButtonModal } from '~/components/ButtonModal';
 import { WithHeader } from '~/components/Header';
 import { SettingItem } from '~/components/SettingItem';
 import { invoke } from '~/libs/invoke';
@@ -36,18 +36,22 @@ export default function Index() {
         <>
             <WithHeader>
                 <Container w='30rem'>
-                    <Accordion
-                        variant='default'
-                        multiple
-                        defaultValue={['basic']}
-                    >
-                        <SettingItem title='基本設定' order={2} value='basic'>
-                            <Stack>
-                                <Title order={3}>Formatter</Title>
-                                <Stack>
-                                    {config
-                                        ? (
-                                            <FormatterTable
+                    {config
+                        ? (
+                            <Accordion
+                                variant='default'
+                                multiple
+                                defaultValue={['basic']}
+                            >
+                                <SettingItem
+                                    title='基本設定'
+                                    order={2}
+                                    value='basic'
+                                >
+                                    <Stack>
+                                        <Title order={3}>Formatter</Title>
+                                        <Stack>
+                                            <BasicFormatterTable
                                                 disabled={promise}
                                                 formatter={config.formatter}
                                                 current={config
@@ -76,39 +80,63 @@ export default function Index() {
                                                     });
                                                 }}
                                             />
-                                        )
-                                        : <Skeleton />}
-                                </Stack>
-                            </Stack>
-                        </SettingItem>
+                                        </Stack>
+                                    </Stack>
+                                </SettingItem>
 
-                        <SettingItem
-                            title='高度な設定'
-                            order={2}
-                            value='advanced'
-                        >
-                            <Stack>
-                                <Checkbox label='Formatterのカスタマイズ' />
-                                <Center>
-                                    <Button
-                                        onClick={() => {
-                                            void (async () => {
-                                                setPromise(true);
-                                                await invoke('reset_config');
-                                                setConfig(
-                                                    await invoke('get_config'),
-                                                );
-                                            })().finally(() => {
-                                                setPromise(false);
-                                            });
-                                        }}
-                                    >
-                                        設定のリセット
-                                    </Button>
-                                </Center>
-                            </Stack>
-                        </SettingItem>
-                    </Accordion>
+                                <SettingItem
+                                    title='高度な設定'
+                                    order={2}
+                                    value='advanced'
+                                >
+                                    <Stack>
+                                        <Checkbox
+                                            label='上級者向け'
+                                            defaultChecked={config.advanced}
+                                            onChange={(e) => {
+                                                void (async () => {
+                                                    config.advanced =
+                                                        e.target.checked;
+
+                                                    await invoke('set_config', {
+                                                        newConfig: config,
+                                                    });
+
+                                                    setConfig(config);
+                                                })().finally(() => {
+                                                    setPromise(false);
+                                                });
+                                            }}
+                                        />
+                                        <Center>
+                                            <ButtonModal
+                                                title='設定をリセットしますか？'
+                                                message='この操作を戻すことはできません。'
+                                                confirmMessage='リセット'
+                                                onConfirm={() => {
+                                                    void (async () => {
+                                                        setPromise(true);
+                                                        await invoke(
+                                                            'reset_config',
+                                                        );
+                                                        setConfig(
+                                                            await invoke(
+                                                                'get_config',
+                                                            ),
+                                                        );
+                                                    })().finally(() => {
+                                                        setPromise(false);
+                                                    });
+                                                }}
+                                            >
+                                                設定のリセット
+                                            </ButtonModal>
+                                        </Center>
+                                    </Stack>
+                                </SettingItem>
+                            </Accordion>
+                        )
+                        : <Skeleton />}
                 </Container>
             </WithHeader>
         </>

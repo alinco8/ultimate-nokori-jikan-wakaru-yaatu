@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import '@mantine/core/styles.css';
 import './App.scss';
+import { ModalsProvider } from '@mantine/modals';
 
 export const links: LinksFunction = () => [];
 
@@ -41,9 +42,11 @@ export default function App() {
 
     return (
         <MantineProvider defaultColorScheme='auto'>
-            <QueryClientProvider client={queryClient}>
-                <Outlet />
-            </QueryClientProvider>
+            <ModalsProvider>
+                <QueryClientProvider client={queryClient}>
+                    <Outlet />
+                </QueryClientProvider>
+            </ModalsProvider>
         </MantineProvider>
     );
 }
