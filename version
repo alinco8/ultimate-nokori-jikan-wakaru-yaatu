@@ -1,0 +1,12 @@
+if [ -z "$1" ]; then
+    echo "Usage: $0 <version>"
+    exit 1
+fi
+
+echo "Changing package.json"
+cat ./package.json | jq ".version = \"$1\"" >temp.package.json
+echo "Changing src-tauri/tauri.conf.json"
+cat ./src-tauri/tauri.conf.json | jq ".version = \"$1\"" >temp.tauri.conf.json
+echo "Changing src-tauri/Cargo.toml"
+cat ./src-tauri/Cargo.toml | dasel -r toml -w json | jq ".package.version = \"$1\"" | dasel -r json -w toml >temp.Cargo.toml
+echo "Complete"
