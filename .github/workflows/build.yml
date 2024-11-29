@@ -37,7 +37,7 @@ jobs:
                       ~/.cargo/registry
                       ~/.cargo/git
                       src-tauri/target
-                  key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+                  key: ${{ runner.os }}-cargo
             - uses: tauri-apps/tauri-action@v0
               env:
                   TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}}
