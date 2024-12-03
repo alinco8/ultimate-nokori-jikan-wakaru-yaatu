@@ -102,7 +102,8 @@ export default function UpdatePage() {
                                 w='35rem'
                                 key={update.version}
                                 version={update.version}
-                                description={update.notes}
+                                description={update.notes.split('\n').slice(1)
+                                    .join('\n')}
                                 mb='lg'
                             />
                         ))
