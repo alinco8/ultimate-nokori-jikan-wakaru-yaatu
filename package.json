@@ -47,6 +47,7 @@
         "@mantine/hooks": "^7.14.3",
         "@mantine/modals": "^7.14.3",
         "@remix-run/dev": "^2.15.0",
+        "@semantic-release/exec": "^6.0.3",
         "@souhaildev/reactemojis": "^1.0.5",
         "@storybook/addon-essentials": "^8.4.5",
         "@storybook/addon-interactions": "^8.4.5",

@@ -44,14 +44,15 @@ jobs:
                   bun i --frozen-lockfile
 
             # ==== Build ====
-            - uses: tauri-apps/tauri-action@dev
+
+            - name: Release
+              run: bunx semantic-release
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}}
                   TAURI_SIGNING_PRIVATE_KEY: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}}
-              with:
-                  args: "--target ${{ matrix.target }}"
 
+            # ==== Post ====
             - uses: actions/cache/save@v4
               with:
                   path: |
@@ -59,8 +60,3 @@ jobs:
                       ~/.cargo/git
                       src-tauri/target/
                   key: ${{steps.restore-cache.outputs.cache-primary-key}}
-
-            - name: Release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: bunx semantic-release
