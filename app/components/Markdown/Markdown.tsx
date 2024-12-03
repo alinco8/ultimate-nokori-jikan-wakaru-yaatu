@@ -1,7 +1,7 @@
 import { Anchor, Box, Divider, List, Table, Text, Title } from '@mantine/core';
-import Emoji from '@souhaildev/reactemojis';
 import Marked, { Components } from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkEmoji from 'remark-emoji';
 import remarkGfm from 'remark-gfm';
 import styles from './styles.module.scss';
 
@@ -81,6 +81,7 @@ export const Markdown = ({ content }: MarkdownProps) => {
             remarkPlugins={[
                 remarkGfm,
                 remarkBreaks,
+                remarkEmoji,
             ]}
             className={styles.markdown}
         >
