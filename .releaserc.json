@@ -1,6 +1,7 @@
 {
     "branches": ["main"],
     "plugins": [
+        "@semantic-release/commit-analyzer",
         [
             "@semantic-release/release-notes-generator",
             {
@@ -47,9 +48,21 @@
                 }
             }
         ],
-
-        ["@semantic-release/exec", {
-            "prepareCmd": "./prepare.sh ${nextRelease.version}"
-        }]
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    "src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg",
+                    "src-tauri/target/aarch64-apple-darwin/release/bundle/macos/*.app.tar.gz",
+                    "src-tauri/target/aarch64-apple-darwin/release/bundle/macos/*.app.tar.gz.sig"
+                ]
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "bash prepare.sh ${nextRelease.version}"
+            }
+        ]
     ]
 }
