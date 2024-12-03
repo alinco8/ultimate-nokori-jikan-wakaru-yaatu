@@ -73,7 +73,7 @@ export default function UpdatePage() {
                         break;
 
                     case 'Finished':
-                        setUpdateState({ state: 'ConfirmRelaunch' });
+                        setUpdateState({ state: 'Relaunching' });
                         break;
                 }
             });
@@ -86,12 +86,6 @@ export default function UpdatePage() {
             <Main>
                 {updateState && (
                     <UpdateModal
-                        onRelaunch={() => {
-                            void relaunch();
-                        }}
-                        onClose={() => {
-                            void emit('close-update-page', { wait: 0 });
-                        }}
                         state={updateState}
                     />
                 )}

@@ -1,12 +1,4 @@
-import {
-    Button,
-    Center,
-    Flex,
-    Loader,
-    Modal,
-    Progress,
-    Text,
-} from '@mantine/core';
+import { Center, Loader, Modal, Progress, Text } from '@mantine/core';
 
 export type UpdateModalState = {
     state: 'CheckingUpdate';
@@ -15,17 +7,15 @@ export type UpdateModalState = {
     value: number;
     max: number;
 } | {
-    state: 'ConfirmRelaunch';
+    state: 'Relaunching';
 };
 
 export interface UpdateModalProps {
     state: UpdateModalState;
-    onRelaunch: () => void;
-    onClose: () => void;
 }
 
 export const UpdateModal = (
-    { state, onRelaunch, onClose }: UpdateModalProps,
+    { state }: UpdateModalProps,
 ) => {
     return (
         <Modal
@@ -55,10 +45,10 @@ export const UpdateModal = (
                     </Text>
                 );
 
-            case 'ConfirmRelaunch':
+            case 'Relaunching':
                 return (
                     <Text mb='md'>
-                        アップデートが完了しました
+                        再起動中...
                     </Text>
                 );
         }
@@ -76,18 +66,9 @@ export const UpdateModal = (
             case 'Updating':
                 return <Progress value={(state.value / state.max) * 100} />;
 
-            case 'ConfirmRelaunch':
+            case 'Relaunching':
                 return (
                     <>
-                        <Flex
-                            justify={{ base: 'center' }}
-                            gap={{ base: 'md', sm: 'lg' }}
-                        >
-                            <Button onClick={onRelaunch}>再起動する</Button>
-                            <Button variant='outline' onClick={onClose}>
-                                あとで
-                            </Button>
-                        </Flex>
                     </>
                 );
         }
