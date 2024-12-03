@@ -47,24 +47,9 @@
                 }
             }
         ],
-        [
-            "@semantic-release/github",
-            {
-                "assets": [
-                    {
-                        "path": "src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/perfect-app-template_0.1.0_aarch64.dmg",
-                        "label": "app.dmg"
-                    },
-                    {
-                        "path": "src-tauri/target/aarch64-apple-darwin/release/bundle/macos/perfect-app-template.app.tar.gz",
-                        "label": "app.tar.gz"
-                    },
-                    {
-                        "path": "src-tauri/target/aarch64-apple-darwin/release/bundle/macos/perfect-app-template.app.tar.gz.sig",
-                        "label": "app.tar.gz.sig"
-                    }
-                ]
-            }
-        ]
+
+        ["@semantic-release/exec", {
+            "prepareCmd": "./prepare.sh ${nextRelease.version}"
+        }]
     ]
 }
