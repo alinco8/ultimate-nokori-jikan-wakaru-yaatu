@@ -1,0 +1,66 @@
+name: Release
+on:
+    push:
+        branches:
+            - main
+permissions: write-all
+jobs:
+    release:
+        env:
+            CARGO_INCREMENTAL: 1
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - platform: "macos-latest"
+                      target: aarch64-apple-darwin
+
+        runs-on: ${{ matrix.platform }}
+        steps:
+            # ==== Pre ====
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - uses: oven-sh/setup-bun@v2
+            - uses: dtolnay/rust-toolchain@stable
+              with:
+                  targets:
+                      aarch64-apple-darwin
+            - uses: actions/cache/restore@v4
+              id: restore-cache
+              with:
+                  path: |
+                      ~/.cargo/registry
+                      ~/.cargo/git
+                      src-tauri/target/
+                  key: ${{ runner.os }}_${{matrix.target}}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            - name: Restore mtime
+              run: python ./git-restore-mtime.py
+            - name: Install dependencies
+              run: |
+                  bun i --frozen-lockfile
+
+            # ==== Build ====
+            - uses: tauri-apps/tauri-action@dev
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}}
+                  TAURI_SIGNING_PRIVATE_KEY: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}}
+              with:
+                  args: "--target ${{ matrix.target }}"
+
+            - uses: actions/cache/save@v4
+              with:
+                  path: |
+                      ~/.cargo/registry
+                      ~/.cargo/git
+                      src-tauri/target/
+                  key: ${{steps.restore-cache.outputs.cache-primary-key}}
+
+            - name: Release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: bunx semantic-release

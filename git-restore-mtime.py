@@ -31,7 +31,6 @@ assuming the actual modification date and its commit date are close.
 
 # TODO:
 # - Add -z on git whatchanged/ls-files, so we don't deal with filename decoding
-# - When Python is bumped to 3.7, use text instead of universal_newlines on subprocess
 # - Update "Statistics for some large projects" with modern hardware and repositories.
 # - Create a README.md for git-restore-mtime alone. It deserves extensive documentation
 #   - Move Statistics there
@@ -75,6 +74,9 @@ import signal
 import subprocess
 import sys
 import time
+
+if sys.version_info < (3, 8):
+    sys.exit("Python 3.8 or later required.")
 
 __version__ = "2022.12+dev"
 
@@ -324,7 +326,7 @@ class Git:
 
     def log(self, merge=False, first_parent=False, commit_time=False,
             reverse_order=False, paths: list = None):
-        cmd = 'whatchanged --pretty={}'.format('%ct' if commit_time else '%at')
+        cmd = 'whatchanged --no-show-signature --pretty={}'.format('%ct' if commit_time else '%at')
         if merge:         cmd += ' -m'
         if first_parent:  cmd += ' --first-parent'
         if reverse_order: cmd += ' --reverse'
@@ -351,7 +353,7 @@ class Git:
         if paths:
             cmdlist.append('--')
             cmdlist.extend(paths)
-        popen_args = dict(universal_newlines=True, encoding='utf8')
+        popen_args = dict(text=True, encoding='utf8')
         if not self.errors:
             popen_args['stderr'] = subprocess.DEVNULL
         log.trace("Executing: %s", ' '.join(cmdlist))

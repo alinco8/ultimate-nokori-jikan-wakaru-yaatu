@@ -1,0 +1,90 @@
+module.exports = {
+    disableEmoji: true,
+    format: '{type}({scope}): {subject}',
+    list: [
+        'chore',
+        'ci',
+        'docs',
+        'feat',
+        'fix',
+        'perf',
+        'refactor',
+        'revert',
+        'style',
+        'test',
+    ],
+    maxMessageLength: 64,
+    minMessageLength: 3,
+    questions: [
+        'type',
+        'scope',
+        'subject',
+        'body',
+        'breaking',
+        'issues',
+        'lerna',
+    ],
+    scopes: [],
+    types: {
+        chore: {
+            description: 'ビルドプロセスまたは補助ツールの変更',
+            emoji: '🤖',
+            value: 'chore',
+        },
+        ci: {
+            description: 'CI関連の変更',
+            emoji: '🎡',
+            value: 'ci',
+        },
+        docs: {
+            description: 'ドキュメントのみの変更',
+            emoji: '✏️',
+            value: 'docs',
+        },
+        feat: {
+            description: '新しい機能',
+            emoji: '🎸',
+            value: 'feat',
+        },
+        fix: {
+            description: 'バグ修正',
+            emoji: '🐛',
+            value: 'fix',
+        },
+        perf: {
+            description: 'パフォーマンスを改善するコード変更',
+            emoji: '⚡️',
+            value: 'perf',
+        },
+        refactor: {
+            description: 'バグ修正や機能追加に該当しないコードの変更',
+            emoji: '💡',
+            value: 'refactor',
+        },
+        revert: {
+            description: '過去のコミットを取り消す',
+            emoji: '⏪',
+            value: 'release',
+        },
+        style: {
+            description:
+                'マークアップ、空白、フォーマット、セミコロンの欠落など...',
+            emoji: '💄',
+            value: 'style',
+        },
+        test: {
+            description: '不足しているテストの追加',
+            emoji: '💍',
+            value: 'test',
+        },
+        messages: {
+            type: 'コミットする変更の種類を選択してください:',
+            customScope: 'この変更が影響する範囲を選択してください:',
+            subject: '変更内容を簡潔に、命令形で記述してください:\n',
+            body: '変更内容を詳しく記述してください:\n ',
+            breaking: '互換性に影響を及ぼす変更を記述してください:\n',
+            footer: 'このコミットで解決するIssue（例: #123）:',
+            confirmCommit: 'このコミットが影響を与えたパッケージ\n',
+        },
+    },
+};
