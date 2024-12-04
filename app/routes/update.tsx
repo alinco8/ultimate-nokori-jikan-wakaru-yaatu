@@ -1,5 +1,5 @@
+import { Route } from '.react-router/types/app/+types/root';
 import { AppShell, Button, Flex, Loader } from '@mantine/core';
-import type { MetaFunction } from '@remix-run/node';
 import { emit } from '@tauri-apps/api/event';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
@@ -8,7 +8,7 @@ import { Main } from '~/components/Header';
 import { Update } from '~/components/Update';
 import { UpdateModal, UpdateModalState } from '~/components/UpdateModal';
 
-export const meta: MetaFunction = () => {
+export const meta: Route.MetaFunction = () => {
     return [{ title: 'アップデート' }, { name: 'description', content: '' }];
 };
 
