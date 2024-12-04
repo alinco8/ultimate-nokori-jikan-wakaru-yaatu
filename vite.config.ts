@@ -23,10 +23,10 @@ export default defineConfig({
         host: host || false,
         hmr: host
             ? {
-                  protocol: 'ws',
-                  host,
-                  port: 1421,
-              }
+                protocol: 'ws',
+                host,
+                port: 1421,
+            }
             : undefined,
         watch: {
             // 3. tell vite to ignore watching `src-tauri`
@@ -40,7 +40,7 @@ export default defineConfig({
         },
         preprocessorOptions: {
             scss: {
-                additionalData: `@import "./app/_mantine";`,
+                additionalData: `@import "/app/_mantine";`,
             },
         },
     },

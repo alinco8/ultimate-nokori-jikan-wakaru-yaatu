@@ -1,14 +1,14 @@
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-import pluginReact from 'eslint-plugin-react';
-import pluginJs from '@eslint/js';
-import pluginImport from 'eslint-plugin-import';
-import pluginReactHooks from 'eslint-plugin-react-hooks';
-import pluginReactRefresh from 'eslint-plugin-react-refresh';
-import pluginStorybook from 'eslint-plugin-storybook';
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
+import pluginJs from '@eslint/js';
+import pluginImport from 'eslint-plugin-import';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReactRefresh from 'eslint-plugin-react-refresh';
+import pluginUnusedImports from 'eslint-plugin-unused-imports';
 
 const flatCompat = new FlatCompat();
 
@@ -33,6 +33,7 @@ export default [
             'react-refresh': pluginReactRefresh,
             import: pluginImport,
             'react-hooks': pluginReactHooks,
+            'unused-imports': pluginUnusedImports,
         },
     },
     pluginJs.configs.recommended,
@@ -57,6 +58,7 @@ export default [
             'react/forbid-component-props': 'off',
             'react/jsx-indent': 'off',
             '@typescript-eslint/no-dynamic-delete': 'off',
+            'unused-imports/no-unused-imports': 'error',
         },
     },
 ];
