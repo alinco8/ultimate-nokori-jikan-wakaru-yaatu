@@ -12,7 +12,7 @@ export const meta: MetaFunction = () => {
     return [{ title: 'アップデート' }, { name: 'description', content: '' }];
 };
 
-interface Update {
+export interface Update {
     notes: string;
     pub_date: string;
     signature: string;
