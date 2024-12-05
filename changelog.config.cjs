@@ -2,14 +2,13 @@ module.exports = {
     disableEmoji: true,
     format: '{type}({scope}): {subject}',
     list: [
-        'chore',
+        'build',
         'ci',
         'docs',
         'feat',
         'fix',
         'perf',
         'refactor',
-        'revert',
         'style',
         'test',
     ],
@@ -26,55 +25,43 @@ module.exports = {
     ],
     scopes: [],
     types: {
-        chore: {
-            description: 'ビルドプロセスまたは補助ツールの変更',
-            emoji: '🤖',
-            value: 'chore',
+        build: {
+            description:
+                'ビルドシステムや外部依存関係に影響を与える変更（例: npm）',
+            value: 'build',
         },
         ci: {
-            description: 'CI関連の変更',
-            emoji: '🎡',
+            description:
+                '継続的インテグレーション（CI）設定ファイルやスクリプトの変更（例: GithubActions）',
             value: 'ci',
         },
         docs: {
             description: 'ドキュメントのみの変更',
-            emoji: '✏️',
             value: 'docs',
         },
         feat: {
             description: '新しい機能',
-            emoji: '🎸',
             value: 'feat',
         },
         fix: {
             description: 'バグ修正',
-            emoji: '🐛',
             value: 'fix',
         },
         perf: {
-            description: 'パフォーマンスを改善するコード変更',
-            emoji: '⚡️',
+            description: 'パフォーマンスを向上させるコードの変更',
             value: 'perf',
         },
         refactor: {
-            description: 'バグ修正や機能追加に該当しないコードの変更',
-            emoji: '💡',
+            description: 'バグ修正や機能追加を伴わないコードの変更',
             value: 'refactor',
-        },
-        revert: {
-            description: '過去のコミットを取り消す',
-            emoji: '⏪',
-            value: 'release',
         },
         style: {
             description:
-                'マークアップ、空白、フォーマット、セミコロンの欠落など...',
-            emoji: '💄',
+                'コードの意味に影響を与えない変更（空白、フォーマット、セミコロンの欠落など）',
             value: 'style',
         },
         test: {
-            description: '不足しているテストの追加',
-            emoji: '💍',
+            description: '不足しているテストの追加や既存テストの修正',
             value: 'test',
         },
         messages: {
