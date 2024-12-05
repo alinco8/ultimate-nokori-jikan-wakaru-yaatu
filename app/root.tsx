@@ -1,19 +1,18 @@
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-import type { LinksFunction } from '@remix-run/node';
-import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-} from '@remix-run/react';
+import { ModalsProvider } from '@mantine/modals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import type { Route } from './+types/root';
 
 import '@mantine/core/styles.css';
-import './App.scss';
-import { ModalsProvider } from '@mantine/modals';
+import appScss from './App.scss?url';
 
-export const links: LinksFunction = () => [];
+export const links: Route.LinksFunction = () => [
+    {
+        rel: 'stylesheet',
+        href: appScss,
+    },
+];
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (

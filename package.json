@@ -4,7 +4,7 @@
     "version": "2.3.1",
     "private": true,
     "scripts": {
-        "build": "tsc && remix vite:build",
+        "build": "tsc && react-router build",
         "build-storybook": "storybook build",
         "dev": "run-p vite dev:*",
         "dev:scss": "typed-scss-modules -w app/**/*.module.scss --additionalData \"$(cat app/_mantine.scss)\"",
@@ -26,15 +26,16 @@
         }
     },
     "dependencies": {
-        "@remix-run/node": "^2.15.0",
-        "@remix-run/react": "^2.15.0",
+        "@react-router/node": "^7.0.2",
+        "@react-router/serve": "^7.0.2",
         "@tauri-apps/api": "^2.1.1",
         "@tauri-apps/plugin-autostart": "~2.0.0",
         "@tauri-apps/plugin-process": "~2.0.0",
         "@tauri-apps/plugin-shell": "^2.0.1",
         "isbot": "^5.1.17",
         "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "react-dom": "^18.3.1",
+        "react-router": "^7.0.2"
     },
     "devDependencies": {
         "@chromatic-com/storybook": "^3.2.2",
@@ -46,7 +47,7 @@
         "@mantine/core": "^7.14.3",
         "@mantine/hooks": "^7.14.3",
         "@mantine/modals": "^7.14.3",
-        "@remix-run/dev": "^2.15.0",
+        "@react-router/dev": "^7.0.2",
         "@semantic-release/exec": "^6.0.3",
         "@souhaildev/reactemojis": "^1.0.5",
         "@storybook/addon-essentials": "^8.4.6",
