@@ -1,5 +1,5 @@
 import { Radio, Stack } from '@mantine/core';
-import type { AppConfig } from 'src-tauri/bindings/greet';
+import type { AppConfig } from 'src-tauri/bindings/types';
 
 export interface BasicFormatterTableProps {
     readonly formatter: AppConfig['formatter'];
