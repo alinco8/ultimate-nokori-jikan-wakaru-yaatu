@@ -13,6 +13,8 @@ tauri-plugin-process = '2'
 tauri-plugin-shell = '2.0.0'
 tauri-plugin-updater = '2.1.0'
 ts-rs = '10.1.0'
+ts-rs-fn = { path = "../../ts-rs-fn" }
+merge-types = { path = "../../merge-types" }
 
 [dependencies.serde]
 features = ['derive']
@@ -36,8 +38,17 @@ description = 'Ultimate Nokori Jikan Wakaru Yaatu'
 edition = '2021'
 name = 'uljika'
 version = '2.3.1'
+default-run = "main"
 
 [target]
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))']
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = '2'
+
+[[bin]]
+name = "merge-types"
+path = "src/merge_types.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"

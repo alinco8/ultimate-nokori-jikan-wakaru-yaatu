@@ -9,12 +9,12 @@ import {
     Title,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import type { AppConfig } from 'src-tauri/bindings/types';
 import { BasicFormatterTable } from '~/components/BasicFormatterTable';
 import { ButtonModal } from '~/components/ButtonModal';
 import { WithHeader } from '~/components/Header';
 import { SettingItem } from '~/components/SettingItem';
 import { invoke } from '~/libs/invoke';
-import type { AppConfig } from '../../src-tauri/bindings/greet';
 
 export const meta: Route.MetaFunction = () => {
     return [{ title: '設定' }, { name: 'description', content: '' }];

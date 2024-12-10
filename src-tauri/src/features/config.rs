@@ -1,8 +1,6 @@
 use crate::libs::schedule::{ScheduleTime, Schedules};
 use handlebars::{RenderError, RenderErrorReason};
-use serde::de::DeserializeOwned;
-use serde::{Deserialize, Deserializer, Serialize};
-use serde_json::Value;
+use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::time::Duration;
 use std::{fs, ops::Deref, path::PathBuf};
@@ -11,35 +9,15 @@ use tokio::sync::{Mutex, MutexGuard};
 use tokio::time::timeout;
 use ts_rs::TS;
 
-fn ok_or_default<'de, T, D>(deserializer: D) -> Result<T, D::Error>
-where
-    T: DeserializeOwned + Default,
-    D: Deserializer<'de>,
-{
-    let v: Value = Deserialize::deserialize(deserializer)?;
-    Ok(T::deserialize(v).unwrap_or_default())
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(default)]
+#[ts(export)]
 pub struct AppConfig {
-    #[serde(flatten, default)]
-    #[serde(deserialize_with = "ok_or_default")]
+    #[serde(flatten)]
     pub schedules: Schedules,
-
-    #[serde(default)]
-    #[serde(deserialize_with = "ok_or_default")]
     pub gas_url: Option<String>,
-
-    #[serde(default)]
-    #[serde(deserialize_with = "ok_or_default")]
     pub formatter: Vec<(String, String)>,
-
-    #[serde(default)]
-    #[serde(deserialize_with = "ok_or_default")]
     pub current_formatter: String,
-
-    #[serde(default)]
-    #[serde(deserialize_with = "ok_or_default")]
     pub advanced: bool,
 }
 impl Default for AppConfig {

@@ -1,20 +1,22 @@
-use crate::libs::schedule::Schedule;
-
 use super::{
     config::{AppConfig, ConfigManager},
     tray::TrayIdManager,
 };
+use crate::libs::schedule::Schedule;
 use std::{collections::HashMap, ops::Deref};
 use tauri::{generate_handler, ipc::Invoke, AppHandle, Manager};
+use ts_rs_fn::ts_command;
 
 #[tauri::command]
+#[ts_command(true)]
 async fn get_config(app: AppHandle) -> Result<AppConfig, String> {
     let config_manager = app.state::<ConfigManager>();
     let config = config_manager.lock_config().await;
     Ok(config.deref().clone())
 }
 #[tauri::command]
-async fn set_config(app: AppHandle, new_config: AppConfig) -> Result<(), String> {
+#[ts_command]
+async fn set_config(new_config: AppConfig, app: AppHandle) -> Result<(), String> {
     let config_manager = app.state::<ConfigManager>();
     {
         let mut config = config_manager.lock_config().await;
@@ -30,6 +32,7 @@ async fn set_config(app: AppHandle, new_config: AppConfig) -> Result<(), String>
     Ok(())
 }
 #[tauri::command]
+#[ts_command(true)]
 async fn update_tray(app: AppHandle) -> Result<(), String> {
     let config_manager = app.state::<ConfigManager>();
     let tray_id_manager = app.state::<TrayIdManager>();
@@ -41,6 +44,7 @@ async fn update_tray(app: AppHandle) -> Result<(), String> {
     Ok(())
 }
 #[tauri::command]
+#[ts_command(true)]
 async fn reset_config(app: AppHandle) -> Result<(), String> {
     let config_manager = app.state::<ConfigManager>();
 

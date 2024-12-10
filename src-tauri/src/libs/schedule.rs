@@ -118,7 +118,6 @@ pub enum ClosestScheduleMode {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize, TS)]
-#[ts(export, export_to = "type.d.ts")]
 pub struct Schedule {
     pub name: String,
     pub time: ScheduleTime,
@@ -148,7 +147,6 @@ impl Display for Schedule {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, TS)]
-#[ts(export, export_to = "type.d.ts")]
 pub struct ScheduleTime {
     pub hour: Option<u32>,
     pub minute: u32,
