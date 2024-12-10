@@ -38,6 +38,7 @@
         "react-router": "^7.0.2"
     },
     "devDependencies": {
+        "@actions/github": "^6.0.0",
         "@chromatic-com/storybook": "^3.2.2",
         "@commitlint/cli": "^19.6.0",
         "@commitlint/config-conventional": "^19.6.0",
@@ -47,6 +48,7 @@
         "@mantine/core": "^7.14.3",
         "@mantine/hooks": "^7.14.3",
         "@mantine/modals": "^7.14.3",
+        "@octokit/rest": "^21.0.2",
         "@react-router/dev": "^7.0.2",
         "@semantic-release/exec": "^6.0.3",
         "@souhaildev/reactemojis": "^1.0.5",
