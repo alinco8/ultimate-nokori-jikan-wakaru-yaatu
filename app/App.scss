@@ -1,8 +1,7 @@
 html,
 body {
     height: 100%;
-    overscroll-behavior: none;
-    /* overflow: hidden; */
+    overflow: hidden;
 
     &::-webkit-scrollbar {
         display: none;

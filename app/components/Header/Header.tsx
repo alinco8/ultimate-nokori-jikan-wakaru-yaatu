@@ -26,7 +26,9 @@ export interface MainProps {
 export const Main = ({ children }: MainProps) => {
     return (
         <AppShell.Main style={{ height: '100%' }}>
-            {children}
+            <ScrollArea h='100vh'>
+                {children}
+            </ScrollArea>
         </AppShell.Main>
     );
 };
