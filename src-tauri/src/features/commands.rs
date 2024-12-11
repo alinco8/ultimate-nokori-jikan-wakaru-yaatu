@@ -5,6 +5,7 @@ use super::{
 use crate::libs::schedule::Schedule;
 use std::{collections::HashMap, ops::Deref};
 use tauri::{generate_handler, ipc::Invoke, AppHandle, Manager};
+use tauri_plugin_autostart::ManagerExt;
 use ts_rs_fn::ts_command;
 
 #[tauri::command]
@@ -21,12 +22,20 @@ async fn set_config(new_config: AppConfig, app: AppHandle) -> Result<(), String>
     {
         let mut config = config_manager.lock_config().await;
         *config = new_config.clone();
+
+        let autostart_manager = app.autolaunch();
+        if config.auto_start {
+            autostart_manager.enable().unwrap()
+        } else {
+            autostart_manager.disable().unwrap()
+        }
     }
 
     config_manager
         .update_formatter()
         .await
         .map_err(|err| err.to_string())?;
+
     config_manager.save().await;
 
     Ok(())

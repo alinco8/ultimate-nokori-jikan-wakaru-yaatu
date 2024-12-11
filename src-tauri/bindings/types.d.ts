@@ -19,6 +19,7 @@ export type AppConfig = {
     formatter: Array<[string, string]>;
     current_formatter: string;
     advanced: boolean;
+    auto_start: boolean;
     schedules: Array<Schedule>;
 };
 export type update_tray = () => {
