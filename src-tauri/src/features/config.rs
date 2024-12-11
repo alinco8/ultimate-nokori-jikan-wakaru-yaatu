@@ -5,6 +5,7 @@ use std::error::Error;
 use std::time::Duration;
 use std::{fs, ops::Deref, path::PathBuf};
 use tauri::{AppHandle, Manager};
+use tauri_plugin_autostart::ManagerExt;
 use tokio::sync::{Mutex, MutexGuard};
 use tokio::time::timeout;
 use ts_rs::TS;
@@ -19,6 +20,7 @@ pub struct AppConfig {
     pub formatter: Vec<(String, String)>,
     pub current_formatter: String,
     pub advanced: bool,
+    pub auto_start: bool,
 }
 impl Default for AppConfig {
     fn default() -> Self {
@@ -37,6 +39,7 @@ impl Default for AppConfig {
             ],
             current_formatter: "normal".to_string(),
             advanced: false,
+            auto_start: true,
         }
     }
 }
@@ -72,6 +75,13 @@ impl<'a> ConfigManager<'a> {
 
         for (name, formatter) in config.formatter.iter() {
             hb.register_template_string(&name, &formatter).unwrap();
+        }
+
+        let auto_launch_manager = app.autolaunch();
+        if config.auto_start {
+            auto_launch_manager.enable().unwrap();
+        } else {
+            auto_launch_manager.disable().unwrap();
         }
 
         Self {
