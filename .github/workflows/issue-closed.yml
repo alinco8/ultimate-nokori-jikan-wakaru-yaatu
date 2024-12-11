@@ -13,4 +13,4 @@ jobs:
               with:
                   github-token: ${{secrets.GITHUB_TOKEN}}
                   script: |
-                      await (await import('${{ github.workspace }}/scripts/issue/closed.ts')).default()
+                      await (await import('${{ github.workspace }}/scripts/issue/closed')).default()
