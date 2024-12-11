@@ -1,4 +1,4 @@
-import { AppShell, ScrollArea, Text } from '@mantine/core';
+import { AppShell, Center, ScrollArea, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import styles from './style.module.scss';
 
@@ -26,8 +26,13 @@ export interface MainProps {
 export const Main = ({ children }: MainProps) => {
     return (
         <AppShell.Main style={{ height: '100%' }}>
-            <ScrollArea h='100vh'>
+            <ScrollArea h='calc(100vh - 29px)'>
                 {children}
+                <Center mt='lg'>
+                    <Text size='xs' c='var(--mantine-color-dimmed)'>
+                        © 2024 Alinco8
+                    </Text>
+                </Center>
             </ScrollArea>
         </AppShell.Main>
     );
@@ -38,14 +43,12 @@ export interface WithoutHeaderProps {
 }
 export const WithoutHeader = ({ children }: WithoutHeaderProps) => {
     return (
-        <AppShell style={{ height: '100%' }}>
-            <Main>{children}</Main>
-            {
-                /* <Box id='main' w='100%'>
-                <Container>
-                </Container>
-            </Box> */
-            }
+        <AppShell
+            style={{ height: '100%' }}
+        >
+            <Main>
+                {children}
+            </Main>
         </AppShell>
     );
 };
