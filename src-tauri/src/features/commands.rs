@@ -49,13 +49,8 @@ async fn reset_config(app: AppHandle) -> Result<(), String> {
     let config_manager = app.state::<ConfigManager>();
 
     {
-        *config_manager.lock_config().await = AppConfig::default()
+        *config_manager.lock_config().await = AppConfig::default();
     }
-
-    let tray_id_manager = app.state::<TrayIdManager>();
-    let mut data = HashMap::<&str, Option<Schedule>>::new();
-    let tray = app.tray_by_id(&tray_id_manager.id).unwrap();
-    super::tray::update_tray(&config_manager, &mut data, &tray).await;
 
     Ok(())
 }

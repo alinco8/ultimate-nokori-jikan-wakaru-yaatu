@@ -5,14 +5,9 @@ export type set_config = (args: {
 } | {
     Err: string;
 };
-export type ScheduleTime = {
-    hour: number | null;
-    minute: number;
-    second: number;
-};
 export type Schedule = {
     name: string;
-    time: ScheduleTime;
+    time: string;
 };
 export type reset_config = () => {
     Ok: null;

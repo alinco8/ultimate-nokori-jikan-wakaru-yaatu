@@ -1,34 +1,33 @@
-import { Button, Text } from '@mantine/core';
+import { Button, ButtonProps, Text, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
 
-export interface ButtonModalProps {
+export type ButtonModalProps = {
     title: string;
-    message?: string;
+    description?: string;
     confirmMessage?: string;
     cancelMessage?: string;
-    children: React.ReactNode;
     onCancel?: () => void;
     onConfirm: () => void;
-}
+} & ButtonProps;
 
 export const ButtonModal = (
     {
         onCancel,
         onConfirm,
         title,
-        message,
+        description,
         confirmMessage,
         cancelMessage,
-        children,
+        ...buttonProps
     }: ButtonModalProps,
 ) => {
     const openModal = () => {
         modals.openConfirmModal({
             centered: true,
-            title: title,
+            title,
             children: (
-                <Text size='sm'>
-                    {message}
+                <Text size='sm' fw={500} c='var(--mantine-color-dimmed)'>
+                    {description}
                 </Text>
             ),
             labels: {
@@ -43,12 +42,11 @@ export const ButtonModal = (
     return (
         <>
             <Button
+                {...buttonProps}
                 onClick={() => {
                     openModal();
                 }}
-            >
-                {children}
-            </Button>
+            />
         </>
     );
 };
