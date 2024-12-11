@@ -1,19 +1,14 @@
 import { Route } from '.react-router/types/app/+types/root';
-import {
-    Accordion,
-    Center,
-    Checkbox,
-    Container,
-    Skeleton,
-    Stack,
-    Title,
-} from '@mantine/core';
+import { Center, Container, Skeleton } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import type { AppConfig } from 'src-tauri/bindings/types';
-import { BasicFormatterTable } from '~/components/BasicFormatterTable';
-import { ButtonModal } from '~/components/ButtonModal';
 import { WithHeader } from '~/components/Header';
-import { SettingItem } from '~/components/SettingItem';
+import { Setting } from '~/components/Setting';
+import { SettingButtonModal } from '~/components/SettingButtonModal';
+import { SettingCheckbox } from '~/components/SettingCheckbox';
+import { SettingGroup } from '~/components/SettingGroup';
+import { SettingSelect } from '~/components/SettingSelect';
+import { createDisabled, DisableProvider } from '~/contexts/disabled';
 import { invoke } from '~/libs/invoke';
 
 export const meta: Route.MetaFunction = () => {
@@ -22,7 +17,7 @@ export const meta: Route.MetaFunction = () => {
 
 export default function Home() {
     const [config, setConfig] = useState<AppConfig>();
-    const [promise, setPromise] = useState(false);
+    const { isDisabled, setDisabled } = createDisabled(false);
 
     useEffect(() => {
         void (async () => {
@@ -31,114 +26,96 @@ export default function Home() {
             setConfig(config);
         })();
     }, []);
+    const changeConfig = (func: () => AppConfig | Promise<AppConfig>) => {
+        void (async () => {
+            setDisabled(true);
+
+            const config = await func();
+
+            setConfig(config);
+        })().finally(() => {
+            setDisabled(false);
+        });
+    };
 
     return (
-        <>
+        <DisableProvider isDisabled={isDisabled} setDisabled={setDisabled}>
             <WithHeader>
-                <Container w='30rem'>
+                <Container w='30rem' mt='sm'>
                     {config
                         ? (
-                            <Accordion
-                                variant='default'
-                                multiple
-                                defaultValue={['basic']}
-                            >
-                                <SettingItem
-                                    title='基本設定'
-                                    order={2}
-                                    value='basic'
-                                >
-                                    <Stack>
-                                        <Title order={3}>Formatter</Title>
-                                        <Stack>
-                                            <BasicFormatterTable
-                                                disabled={promise}
-                                                formatter={config.formatter}
-                                                current={config
-                                                    .current_formatter}
-                                                onCurrentChange={(name) => {
-                                                    void (async () => {
-                                                        setPromise(true);
-                                                        config
-                                                            .current_formatter =
-                                                                name;
+                            <Setting>
+                                <SettingGroup title='基本設定'>
+                                    <SettingSelect
+                                        label='Formatter'
+                                        description='表示形式を設定'
+                                        onChange={(value) => {
+                                            changeConfig(async () => {
+                                                config.current_formatter = value
+                                                    || config.formatter[0][0];
 
-                                                        setConfig(config);
+                                                await invoke('set_config', {
+                                                    newConfig: config,
+                                                });
+                                                await invoke('update_tray');
 
-                                                        await invoke(
-                                                            'set_config',
-                                                            {
-                                                                newConfig:
-                                                                    config,
-                                                            },
-                                                        );
-                                                        await invoke(
-                                                            'update_tray',
-                                                        );
-                                                    })().finally(() => {
-                                                        setPromise(false);
-                                                    });
-                                                }}
-                                            />
-                                        </Stack>
-                                    </Stack>
-                                </SettingItem>
+                                                return config;
+                                            });
+                                        }}
+                                        allowDeselect={false}
+                                        key={`formatter-${config.current_formatter}`}
+                                        defaultValue={config.current_formatter}
+                                        data={config.formatter.map((fmt) =>
+                                            fmt[0]
+                                        )}
+                                    />
+                                </SettingGroup>
+                                <SettingGroup title='高度な設定'>
+                                    <SettingCheckbox
+                                        label='高度な機能'
+                                        description='高度な機能を有効にする'
+                                        key={`advanced-${config.advanced.toString()}`}
+                                        defaultChecked={config.advanced}
+                                        onChange={(e) => {
+                                            changeConfig(async () => {
+                                                config.advanced =
+                                                    e.target.checked;
 
-                                <SettingItem
-                                    title='高度な設定'
-                                    order={2}
-                                    value='advanced'
-                                >
-                                    <Stack>
-                                        <Checkbox
-                                            label='上級者向け'
-                                            defaultChecked={config.advanced}
-                                            onChange={(e) => {
-                                                void (async () => {
-                                                    config.advanced =
-                                                        e.target.checked;
+                                                await invoke('set_config', {
+                                                    newConfig: config,
+                                                });
 
-                                                    await invoke('set_config', {
-                                                        newConfig: config,
-                                                    });
+                                                return config;
+                                            });
+                                        }}
+                                    />
+                                    <Center>
+                                        <SettingButtonModal
+                                            title='本当にリセットしますか？'
+                                            description='この操作は取り消せません'
+                                            onConfirm={() => {
+                                                changeConfig(async () => {
+                                                    await invoke(
+                                                        'reset_config',
+                                                    );
+                                                    await invoke('update_tray');
+                                                    const config = await invoke(
+                                                        'get_config',
+                                                    );
 
-                                                    setConfig(config);
-                                                })().finally(() => {
-                                                    setPromise(false);
+                                                    return config;
                                                 });
                                             }}
-                                        />
-                                        <Center>
-                                            <ButtonModal
-                                                title='設定をリセットしますか？'
-                                                message='この操作を戻すことはできません。'
-                                                confirmMessage='リセット'
-                                                onConfirm={() => {
-                                                    void (async () => {
-                                                        setPromise(true);
-                                                        await invoke(
-                                                            'reset_config',
-                                                        );
-                                                        setConfig(
-                                                            await invoke(
-                                                                'get_config',
-                                                            ),
-                                                        );
-                                                    })().finally(() => {
-                                                        setPromise(false);
-                                                    });
-                                                }}
-                                            >
-                                                設定のリセット
-                                            </ButtonModal>
-                                        </Center>
-                                    </Stack>
-                                </SettingItem>
-                            </Accordion>
+                                        >
+                                            設定をリセット
+                                        </SettingButtonModal>
+                                    </Center>
+                                </SettingGroup>
+                            </Setting>
                         )
                         : <Skeleton />}
                 </Container>
             </WithHeader>
-        </>
+        </DisableProvider>
     );
 }

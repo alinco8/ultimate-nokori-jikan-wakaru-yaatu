@@ -146,11 +146,43 @@ impl Display for Schedule {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, TS)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ScheduleTime {
     pub hour: Option<u32>,
     pub minute: u32,
     pub second: u32,
+}
+impl TS for ScheduleTime {
+    type WithoutGenerics = Self;
+
+    fn decl() -> String {
+        panic!("{} cannot be declared", Self::name())
+    }
+
+    fn decl_concrete() -> String {
+        panic!("{} cannot be declared", Self::name())
+    }
+
+    fn name() -> String {
+        "string".to_string()
+    }
+
+    fn inline() -> String {
+        Self::name()
+    }
+
+    fn inline_flattened() -> String {
+        panic!("{} cannot be flattened", Self::name())
+    }
+}
+
+impl Display for ScheduleTime {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.hour {
+            Some(hour) => write!(f, "{:0>2}:{:0>2}:{:0>2}", hour, self.minute, self.second),
+            None => write!(f, "{:0>2}:{:0>2}", self.minute, self.second),
+        }
+    }
 }
 impl Serialize for ScheduleTime {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -160,12 +192,12 @@ impl Serialize for ScheduleTime {
         serializer.serialize_str(&format!("{}", self))
     }
 }
-impl Display for ScheduleTime {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self.hour {
-            Some(hour) => write!(f, "{:0>2}:{:0>2}:{:0>2}", hour, self.minute, self.second),
-            None => write!(f, "{:0>2}:{:0>2}", self.minute, self.second),
-        }
+impl<'de> Deserialize<'de> for ScheduleTime {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        deserializer.deserialize_str(ScheduleTimeVisitor)
     }
 }
 impl ScheduleTime {
@@ -191,14 +223,7 @@ impl ScheduleTime {
         }
     }
 }
-impl<'de> Deserialize<'de> for ScheduleTime {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        deserializer.deserialize_str(ScheduleTimeVisitor)
-    }
-}
+
 pub struct ScheduleTimeVisitor;
 impl<'de> Visitor<'de> for ScheduleTimeVisitor {
     type Value = ScheduleTime;
