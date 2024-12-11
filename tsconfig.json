@@ -21,5 +21,10 @@
         },
 
         "noEmit": true
-    }
+    },
+    "references": [
+        {
+            "path": "./tsconfig.scripts.json"
+        }
+    ]
 }
