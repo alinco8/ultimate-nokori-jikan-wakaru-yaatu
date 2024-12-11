@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "NodeNext",
+        "strict": true,
+
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "rootDir": "scripts/src/",
+        "moduleResolution": "nodenext",
+        "strictNullChecks": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "composite": true,
+
+        "noEmit": false
+    },
+    "include": ["scripts/src/"]
+}

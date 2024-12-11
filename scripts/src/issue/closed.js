@@ -1,8 +1,6 @@
-import type { Context } from '@actions/github/lib/context';
-import { Octokit } from '@octokit/rest';
-
-declare const context: Context;
-declare const github: Octokit;
+/**
+ * @typedef {import('./global').Status} Status
+ */
 
 export default async function() {
     const labels = (await github.rest.issues.listLabelsOnIssue({
@@ -11,9 +9,10 @@ export default async function() {
         issue_number: context.issue.number,
     })).data.map((label) => label.name);
 
-    const statusLabel = labels.find((label) => label.startsWith('Status: ')) as
-        | Status
-        | undefined;
+    /**
+     * @type {Status}
+     */
+    const statusLabel = labels.find((label) => label.startsWith('Status: '));
     if (!statusLabel) {
         throw new Error('Status label not found');
     }
@@ -36,18 +35,11 @@ export default async function() {
     }
 }
 
-enum Status {
-    Pending = 'Status: Pending',
-    Canceled = 'Status: Canceled',
-    Available = 'Status: Available',
-    Completed = 'Status: Completed',
-    InProgress = 'Status: In Progress',
-    Inactive_Abandoned = 'Status: Inactive - Abandoned',
-    Inactive_Duplicate = 'Status: Inactive - Duplicate',
-    Inactive_WontFix = 'Status: Inactive - Won\'t Fix',
-}
-
-async function replaceStatusLabel(oldLabel: Status, newLabel: Status) {
+/**
+ * @param {Status} oldLabel
+ * @param {Status} newLabel
+ */
+async function replaceStatusLabel(oldLabel, newLabel) {
     await github.rest.issues.removeLabel({
         owner: context.repo.owner,
         repo: context.repo.repo,
