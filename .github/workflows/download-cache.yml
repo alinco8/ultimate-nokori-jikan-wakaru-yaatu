@@ -10,8 +10,11 @@ jobs:
                 include:
                     - platform: "macos-latest"
                       target: aarch64-apple-darwin
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.platform }}
         steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
             - uses: actions/cache/restore@v4
               id: restore-cache
               with:
