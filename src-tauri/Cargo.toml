@@ -38,7 +38,7 @@ description = 'Ultimate Nokori Jikan Wakaru Yaatu'
 edition = '2021'
 name = 'uljika'
 version = '2.3.1'
-default-run = "main"
+default-run = "uljika"
 
 [target]
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))']
@@ -50,5 +50,5 @@ name = "merge-types"
 path = "src/merge_types.rs"
 
 [[bin]]
-name = "main"
+name = "uljika"
 path = "src/main.rs"
