@@ -1,0 +1,27 @@
+name: Download Cache
+on:
+    workflow_dispatch:
+permissions: write-all
+jobs:
+    download_cache:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - platform: "macos-latest"
+                      target: aarch64-apple-darwin
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/cache/restore@v4
+              id: restore-cache
+              with:
+                  path: |
+                      ~/.cargo/registry
+                      ~/.cargo/git
+                      src-tauri/target/
+                  key: ${{ runner.os }}_${{matrix.target}}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: target-cache
+                  path: src-tauri/target/
