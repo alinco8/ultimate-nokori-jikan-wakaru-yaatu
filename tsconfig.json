@@ -1,5 +1,6 @@
 {
     "include": ["**/*", ".react-router/types/**/*"],
+    "exclude": ["src-tauri/"],
     "compilerOptions": {
         "lib": ["DOM", "DOM.Iterable", "ES2022"],
         "types": ["node", "vite/client"],
