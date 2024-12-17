@@ -56,6 +56,7 @@ export default [
             'react/forbid-component-props': 'off',
             'react/jsx-indent': 'off',
             '@typescript-eslint/no-dynamic-delete': 'off',
+            '@typescript-eslint/unified-signatures': 'off',
         },
     },
 ];

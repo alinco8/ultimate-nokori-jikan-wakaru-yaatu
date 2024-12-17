@@ -1,12 +1,13 @@
 import { Route } from '.react-router/types/app/+types/root';
 import { Center, Container, Skeleton } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import type { AppConfig } from 'src-tauri/bindings/types';
+import type { AppConfig, Course } from 'src-tauri/bindings/types';
 import { Setting } from '~/components/Setting';
 import { SettingButtonModal } from '~/components/SettingButtonModal';
 import { SettingCheckbox } from '~/components/SettingCheckbox';
 import { SettingGroup } from '~/components/SettingGroup';
 import { SettingSelect } from '~/components/SettingSelect';
+import { SettingTextInput } from '~/components/SettingTextInput';
 import { createDisabled, DisableProvider } from '~/contexts/disabled';
 import { invoke } from '~/libs/invoke';
 
@@ -45,6 +46,40 @@ export default function Home() {
                         <Setting>
                             <SettingGroup title='基本設定'>
                                 <SettingSelect
+                                    label='コース'
+                                    description='コースを選択'
+                                    allowDeselect={false}
+                                    key={`course-${config.course}`}
+                                    defaultValue={config.course}
+                                    data={[
+                                        {
+                                            value: 'One',
+                                            label: '週1',
+                                        },
+                                        {
+                                            value: 'Three',
+                                            label: '週3',
+                                        },
+                                        {
+                                            value: 'Five',
+                                            label: '週5',
+                                        },
+                                    ]}
+                                    onChange={(value: string | null) => {
+                                        changeConfig(async () => {
+                                            config.course = (value
+                                                ?? config.course) as Course;
+
+                                            await invoke('set_config', {
+                                                newConfig: config,
+                                            });
+                                            await invoke('update_tray');
+
+                                            return config;
+                                        });
+                                    }}
+                                />
+                                <SettingSelect
                                     label='Formatter'
                                     description='表示形式を設定'
                                     onChange={(value) => {
@@ -64,6 +99,26 @@ export default function Home() {
                                     key={`formatter-${config.current_formatter}`}
                                     defaultValue={config.current_formatter}
                                     data={config.formatter.map((fmt) => fmt[0])}
+                                />
+                                <SettingTextInput
+                                    label='PJS API'
+                                    description='プロジェクトシートに紐づけられたGAS APIのURL'
+                                    key={`gas_url-${config.gas_url}`}
+                                    defaultValue={config.gas_url}
+                                    placeholder='https://script.google.com/macros/s/.../exec'
+                                    onBlur={(e) => {
+                                        setTimeout(() => {
+                                            changeConfig(async () => {
+                                                config.gas_url = e.target.value;
+
+                                                await invoke('set_config', {
+                                                    newConfig: config,
+                                                });
+
+                                                return config;
+                                            });
+                                        }, 10);
+                                    }}
                                 />
                             </SettingGroup>
                             <SettingGroup title='高度な設定'>

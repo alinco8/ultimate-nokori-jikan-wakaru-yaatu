@@ -7,7 +7,7 @@ use swc_ecma_ast::{
     TsEntityName, TsFnOrConstructorType, TsFnParam, TsFnType, TsInterfaceBody, TsInterfaceDecl,
     TsPropertySignature, TsType, TsTypeAliasDecl, TsTypeAnn, TsTypeElement, TsTypeLit, TsTypeRef,
 };
-use swc_ecma_parser::{self, Parser, StringInput, Syntax, TsSyntax, lexer::Lexer};
+use swc_ecma_parser::{self, lexer::Lexer, Parser, StringInput, Syntax, TsSyntax};
 
 pub fn merge_types(files: Vec<String>) -> String {
     let mut modules = Vec::<ModuleItem>::new();
@@ -28,7 +28,7 @@ pub fn merge_types(files: Vec<String>) -> String {
         );
         let mut parser = Parser::new_from(lexer);
         let tree_result = parser.parse_typescript_module();
-        let module = tree_result.expect("パースに失敗");
+        let module = tree_result.expect(format!("パースに失敗しました。コード: {}", file).as_str());
 
         for module_item in module.body {
             match module_item {

@@ -15,7 +15,8 @@ export type reset_config = () => {
     Err: string;
 };
 export type AppConfig = {
-    gas_url: string | null;
+    gas_url: string;
+    course: Course;
     formatter: Array<[string, string]>;
     current_formatter: string;
     advanced: boolean;
@@ -27,6 +28,7 @@ export type update_tray = () => {
 } | {
     Err: string;
 };
+export type Course = "One" | "Three" | "Five";
 export type get_config = () => {
     Ok: AppConfig;
 } | {
