@@ -196,7 +196,23 @@ export default function DiaryPage() {
                                             </>
                                         )
                                         : (
-                                            1
+                                            <Center>
+                                                <Skeleton>
+                                                    <SimpleGrid cols={5}>
+                                                        {Array.from({
+                                                            length: 5,
+                                                        }).map(
+                                                            (_, i) => (
+                                                                <Diary
+                                                                    key={i}
+                                                                    diary=''
+                                                                    date=''
+                                                                />
+                                                            ),
+                                                        )}
+                                                    </SimpleGrid>
+                                                </Skeleton>
+                                            </Center>
                                         )}
                                 </DisableProvider>
                             )
