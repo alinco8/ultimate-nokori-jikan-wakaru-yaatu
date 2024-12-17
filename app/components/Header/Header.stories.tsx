@@ -1,15 +1,13 @@
 import type { StoryObj } from '@storybook/react';
-import { WithHeader } from './Header';
+import { Header } from './Header';
 
 export default {
-    title: 'WithHeader',
-    component: WithHeader,
+    title: 'Header',
+    component: Header,
 };
 
-type Story = StoryObj<typeof WithHeader>;
+type Story = StoryObj<typeof Header>;
 
 export const Primary: Story = {
-    args: {
-        children: <div>children</div>,
-    },
+    args: {},
 };

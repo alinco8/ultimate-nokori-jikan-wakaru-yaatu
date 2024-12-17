@@ -4,7 +4,6 @@ import { emit } from '@tauri-apps/api/event';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
 import { useEffect, useState } from 'react';
-import { Main } from '~/components/Header';
 import { Update } from '~/components/Update';
 import { UpdateModal, UpdateModalState } from '~/components/UpdateModal';
 
@@ -83,7 +82,7 @@ export default function UpdatePage() {
 
     return (
         <AppShell>
-            <Main>
+            <AppShell.Main>
                 {updateState && (
                     <UpdateModal
                         state={updateState}
@@ -103,7 +102,7 @@ export default function UpdatePage() {
                         ))
                         : <Loader />}
                 </Flex>
-            </Main>
+            </AppShell.Main>
             <AppShell.Footer
                 pos='sticky'
                 p='md'
