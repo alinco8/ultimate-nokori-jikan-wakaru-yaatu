@@ -1,12 +1,12 @@
 import type { StoryObj } from '@storybook/react';
-import { Header } from './Header';
+import { Diary } from './Diary';
 
 export default {
-    title: 'Header',
-    component: Header,
+    title: 'Diary',
+    component: Diary,
 };
 
-type Story = StoryObj<typeof Header>;
+type Story = StoryObj<typeof Diary>;
 
 export const Primary: Story = {
     args: {},

@@ -11,12 +11,20 @@ use tokio::time::timeout;
 use ts_rs::TS;
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
+pub enum Course {
+    One,
+    Three,
+    Five,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(default)]
 #[ts(export)]
 pub struct AppConfig {
     #[serde(flatten)]
     pub schedules: Schedules,
-    pub gas_url: Option<String>,
+    pub gas_url: String,
+    pub course: Course,
     pub formatter: Vec<(String, String)>,
     pub current_formatter: String,
     pub advanced: bool,
@@ -26,7 +34,8 @@ impl Default for AppConfig {
     fn default() -> Self {
         Self {
             schedules: Schedules::default(),
-            gas_url: None,
+            gas_url: "".to_string(),
+            course: Course::Three,
             formatter: vec![
                 (
                     "compact".to_string(),
