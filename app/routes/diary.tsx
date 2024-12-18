@@ -2,7 +2,8 @@ import { Route } from '.react-router/types/app/+types/root';
 import { Alert, Center, Container, SimpleGrid, Skeleton } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { addDays, getISODay, subDays } from 'date-fns';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLoaderData, useRevalidator } from 'react-router';
 import { AppConfig } from 'src-tauri/bindings/types';
 import { Diary } from '~/components/Diary';
 import { createDisabled, DisableProvider } from '~/contexts/disabled';
@@ -18,20 +19,29 @@ export const meta: Route.MetaFunction = () => {
 
 export type Diaries = { diary: string; date: string }[];
 
+export const clientLoader = () => {
+    const today = new Date('2024-12-18');
+    const weekDay = getISODay(today) - 1;
+    const monday = subDays(today, weekDay);
+
+    return { today, weekDay, monday };
+};
+
 export default function DiaryPage() {
-    const today = new Date();
+    const { today, weekDay, monday } = useLoaderData<typeof clientLoader>();
+    const revalidator = useRevalidator();
     const cacher = useRef(new Cacher<Diaries>('diaries'));
     const [config, setConfig] = useState<AppConfig | null>(null);
     const [diaries, setDiaries] = useState<
         Diaries | 'fetching' | null
     >(null);
-    const weekDay = useMemo(() => getISODay(today) - 1, []);
-    const monday = useMemo(
-        () => subDays(today, weekDay),
-        [weekDay],
-    );
     const { isDisabled, setDisabled } = createDisabled(false);
     const [failed, setFailed] = useState(false);
+    const onFocus = () => {
+        revalidator.revalidate().catch((e: unknown) => {
+            console.error(e);
+        });
+    };
 
     const updateDiaries = (diary: string, date: string) => {
         setDiaries((diaries) =>
@@ -79,6 +89,12 @@ export default function DiaryPage() {
                 setFailed(true);
             });
         }
+
+        window.addEventListener('focus', onFocus);
+
+        return () => {
+            window.removeEventListener('focus', onFocus);
+        };
     }, []);
     useEffect(() => {
         if (Array.isArray(diaries)) {

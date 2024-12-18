@@ -5,6 +5,7 @@ export default [
     route(null, 'routes/window.tsx', [
         index('routes/setting.tsx'),
         route('/diary', 'routes/diary.tsx'),
+        route('/help', 'routes/help.tsx'),
         route('*', 'routes/notFound.tsx'),
     ]),
 ] satisfies RouteConfig;
