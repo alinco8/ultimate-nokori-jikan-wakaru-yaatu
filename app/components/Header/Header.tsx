@@ -1,13 +1,15 @@
 import { AppShell, Flex, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import styles from './style.module.scss';
 
 export const Header = () => {
     const [title, setTitle] = useState('');
+    const location = useLocation();
 
     useEffect(() => {
         setTitle(document.title);
-    }, []);
+    }, [location]);
 
     return (
         <AppShell.Header

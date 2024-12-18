@@ -101,23 +101,26 @@ export default function Home() {
                                     data={config.formatter.map((fmt) => fmt[0])}
                                 />
                                 <SettingTextInput
+                                    autoComplete='off'
                                     label='PJS API'
                                     description='プロジェクトシートに紐づけられたGAS APIのURL'
                                     key={`gas_url-${config.gas_url}`}
                                     defaultValue={config.gas_url}
                                     placeholder='https://script.google.com/macros/s/.../exec'
-                                    onBlur={(e) => {
-                                        setTimeout(() => {
-                                            changeConfig(async () => {
-                                                config.gas_url = e.target.value;
+                                    validator={(s) =>
+                                        new RegExp(
+                                            /^(https:\/\/script\.google\.com\/macros\/s\/[a-zA-Z0-9-_]+\/exec|)$/,
+                                        ).test(s)}
+                                    onValidValue={(value) => {
+                                        changeConfig(async () => {
+                                            config.gas_url = value;
 
-                                                await invoke('set_config', {
-                                                    newConfig: config,
-                                                });
-
-                                                return config;
+                                            await invoke('set_config', {
+                                                newConfig: config,
                                             });
-                                        }, 10);
+
+                                            return config;
+                                        });
                                     }}
                                 />
                             </SettingGroup>

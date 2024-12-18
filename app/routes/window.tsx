@@ -1,14 +1,13 @@
 import {
     AppShell,
     Center,
-    Divider,
     Flex,
     ScrollArea,
     Tabs,
     Text,
     useMantineTheme,
 } from '@mantine/core';
-import { IconBook2, IconSettings } from '@tabler/icons-react';
+import { IconBook2, IconHelp, IconSettings } from '@tabler/icons-react';
 import { useLocation } from 'react-router';
 import { Outlet, useNavigate } from 'react-router';
 import { Header } from '~/components/Header';
@@ -52,7 +51,12 @@ export default function Window() {
                         }}
                     >
                         <Tabs.List>
-                            <Tabs.Tab value='/' bottom='0px'>
+                            <Tabs.Tab value='/help'>
+                                <IconHelp />
+                            </Tabs.Tab>
+                        </Tabs.List>
+                        <Tabs.List>
+                            <Tabs.Tab value='/'>
                                 <IconSettings />
                             </Tabs.Tab>
                         </Tabs.List>
