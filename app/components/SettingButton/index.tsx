@@ -1,1 +1,1 @@
-export * from "./SettingButton"
+export * from './SettingButton';

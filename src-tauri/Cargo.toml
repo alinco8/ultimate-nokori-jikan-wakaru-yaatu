@@ -8,13 +8,13 @@ chrono = '0.4.38'
 chrono-tz = '0.10.0'
 handlebars = '6.2.0'
 log = '0.4.22'
+merge-types = { path = "../crates/merge-types" }
 serde_json = '1'
 tauri-plugin-process = '2'
 tauri-plugin-shell = '2.0.0'
 tauri-plugin-updater = '2.1.0'
 ts-rs = '10.1.0'
 ts-rs-fn = { path = "../crates/ts-rs-fn" }
-merge-types = { path = "../crates/merge-types" }
 
 [dependencies.serde]
 features = ['derive']
@@ -33,12 +33,12 @@ crate-type = ['staticlib', 'cdylib', 'rlib']
 name = 'uljika_lib'
 
 [package]
-authors = ['Alinco8']
-description = 'Ultimate Nokori Jikan Wakaru Yaatu'
-edition = '2021'
 name = 'uljika'
 version = '2.3.1'
+authors = ['Alinco8']
 default-run = "uljika"
+edition = '2021'
+description = 'Ultimate Nokori Jikan Wakaru Yaatu'
 
 [target]
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))']

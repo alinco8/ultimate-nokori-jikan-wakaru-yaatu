@@ -1,1 +1,1 @@
-export * from "./FormatterTableTextarea"
+export * from './FormatterTableTextarea';

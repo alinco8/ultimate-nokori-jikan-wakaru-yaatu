@@ -1,1 +1,1 @@
-export * from "./SettingSelect"
+export * from './SettingSelect';
