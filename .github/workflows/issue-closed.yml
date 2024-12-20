@@ -8,10 +8,10 @@ jobs:
     add_label:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
             - name: Add label
               uses: actions/github-script@v7
               with:
                   github-token: ${{secrets.GITHUB_TOKEN}}
                   script: |
-                      await (await import('${{ github.workspace }}/scripts/issue/closed')).default()
+                      await (await import('${{ github.workspace }}/scripts/issue/closed.js')).default()
