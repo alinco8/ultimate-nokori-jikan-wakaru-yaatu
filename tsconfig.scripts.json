@@ -7,7 +7,7 @@
         "typeRoots": [
             "node_modules/@types"
         ],
-        "rootDir": "scripts/src/",
+        "rootDir": "scripts/",
         "moduleResolution": "nodenext",
         "strictNullChecks": true,
         "isolatedModules": true,
@@ -17,5 +17,5 @@
 
         "noEmit": false
     },
-    "include": ["scripts/src/"]
+    "include": ["scripts/"]
 }

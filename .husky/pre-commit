@@ -1,1 +1,3 @@
 bun test
+bun run format | bun run scripts/pre-commit/dprint-parser.js
+bun run lint:fix
