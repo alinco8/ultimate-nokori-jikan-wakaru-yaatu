@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = () => {
 export type Diaries = { diary: string; date: string }[];
 
 export const clientLoader = () => {
-    const today = new Date('2024-12-18');
+    const today = new Date();
     const weekDay = getISODay(today) - 1;
     const monday = subDays(today, weekDay);
 
