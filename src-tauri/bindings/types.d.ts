@@ -28,7 +28,7 @@ export type update_tray = () => {
 } | {
     Err: string;
 };
-export type Course = "One" | "Three" | "Five";
+export type Course = 'One' | 'Three' | 'Five';
 export type get_config = () => {
     Ok: AppConfig;
 } | {

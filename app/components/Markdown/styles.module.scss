@@ -30,7 +30,8 @@
     }
 
     kbd {
-        @apply text-xs inline-block rounded border px-1 py-05 align-middle font-normal font-mono shadow;
+        @apply text-xs inline-block rounded border px-1 py-05 align-middle
+            font-normal font-mono shadow;
     }
 
     table {
