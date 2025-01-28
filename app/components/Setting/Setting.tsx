@@ -1,6 +1,7 @@
-import { Checkbox, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 
 import { SettingButton } from '~/components/SettingButton';
+import { SettingCheckbox } from '~/components/SettingCheckbox';
 import { SettingGroup } from '~/components/SettingGroup';
 import { SettingsAdvanced } from '~/components/SettingsAdvanced';
 import { SettingsBasic } from '~/components/SettingsBasic';
@@ -17,7 +18,7 @@ export const Setting = () => {
 };
 
 Setting.Button = SettingButton;
-Setting.Checkbox = Checkbox;
+Setting.Checkbox = SettingCheckbox;
 Setting.Group = SettingGroup;
 Setting.Select = SettingSelect;
 Setting.TextInput = SettingTextInput;
