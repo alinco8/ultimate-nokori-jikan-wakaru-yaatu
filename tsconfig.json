@@ -1,5 +1,5 @@
 {
-    "include": ["**/*", ".react-router/types/**/*"],
+    "include": ["**/*", ".storybook/**/*", ".react-router/types/**/*"],
     "exclude": ["src-tauri/"],
     "compilerOptions": {
         "lib": ["DOM", "DOM.Iterable", "ES2022"],

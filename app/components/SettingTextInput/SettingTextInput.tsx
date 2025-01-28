@@ -1,6 +1,6 @@
 import { TextInput, TextInputProps } from '@mantine/core';
 import { useValidatedState } from '@mantine/hooks';
-import { useDisabled } from '~/contexts/disabled';
+import { useConfigStore } from '~/stores/config';
 
 export type SettingTextInputProps = {
     disableWhenPending?: boolean;
@@ -17,7 +17,7 @@ export const SettingTextInput = (
         ...textInputProps
     }: SettingTextInputProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
     const [{
         value,
         lastValidValue,
@@ -33,7 +33,7 @@ export const SettingTextInput = (
                 {...textInputProps}
                 error={!valid}
                 value={value}
-                disabled={disableWhenPending && isDisabled}
+                disabled={disableWhenPending && loading}
                 onChange={(e) => {
                     setValue(e.currentTarget.value);
                     textInputProps.onChange?.(e);

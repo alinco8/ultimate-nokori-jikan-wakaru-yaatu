@@ -1,16 +1,32 @@
-import { createTheme, MantineProvider } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import {
+    PersistQueryClientProvider,
+} from '@tanstack/react-query-persist-client';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { Route } from './+types/root';
 
-import '@mantine/core/styles.css';
+import mantineHighlightCss from '@mantine/code-highlight/styles.css?url';
+import mantineCss from '@mantine/core/styles.css?url';
+import { useEffect, useRef } from 'react';
+import { invoke } from '~/libs/invoke';
+import { useConfigStore } from '~/stores/config';
 import appScss from './App.scss?url';
 
 export const links: Route.LinksFunction = () => [
     {
         rel: 'stylesheet',
         href: appScss,
+    },
+    {
+        rel: 'stylesheet',
+        href: mantineCss,
+    },
+    {
+        rel: 'stylesheet',
+        href: mantineHighlightCss,
     },
 ];
 
@@ -36,14 +52,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const queryClient = new QueryClient();
+    const query = useRef({
+        client: new QueryClient({
+            defaultOptions: {
+                queries: {
+                    gcTime: 1000 * 60 * 60,
+                    staleTime: 1000 * 60 * 60,
+                },
+            },
+        }),
+        persister: createSyncStoragePersister({
+            storage: window.localStorage,
+        }),
+    });
+
+    useEffect(() => {
+        invoke('get_config').then(config => {
+            useConfigStore.getState().setConfig(async () => config);
+        });
+    }, []);
 
     return (
         <MantineProvider defaultColorScheme='auto'>
             <ModalsProvider>
-                <QueryClientProvider client={queryClient}>
+                <PersistQueryClientProvider
+                    client={query.current.client}
+                    persistOptions={{ persister: query.current.persister }}
+                >
                     <Outlet />
-                </QueryClientProvider>
+                </PersistQueryClientProvider>
             </ModalsProvider>
         </MantineProvider>
     );

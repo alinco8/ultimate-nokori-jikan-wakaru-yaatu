@@ -33,8 +33,13 @@ export default defineConfig({
         },
         preprocessorOptions: {
             scss: {
-                additionalData: `@import "/app/_mantine";`,
+                additionalData: `@use "/app/_mantine" as mantine;`,
             },
         },
+    },
+    optimizeDeps: {
+        entries: [
+            'app/**/*.{ts,tsx,js,jsx}',
+        ],
     },
 });

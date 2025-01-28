@@ -1,5 +1,5 @@
 import { ButtonModal, ButtonModalProps } from '~/components/ButtonModal';
-import { useDisabled } from '~/contexts/disabled';
+import { useConfigStore } from '~/stores/config';
 
 export type SettingButtonModalProps = {
     disableWhenPending?: boolean;
@@ -8,12 +8,12 @@ export type SettingButtonModalProps = {
 export const SettingButtonModal = (
     { disableWhenPending = true, ...buttonModalProps }: SettingButtonModalProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
 
     return (
         <ButtonModal
             {...buttonModalProps}
-            disabled={disableWhenPending && isDisabled}
+            disabled={disableWhenPending && loading}
         />
     );
 };

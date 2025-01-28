@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
             },
             preprocessorOptions: {
                 scss: {
-                    additionalData: `@import "/app/_mantine";`,
+                    additionalData: `@use "/app/_mantine" as mantine;`,
                 },
             },
         },

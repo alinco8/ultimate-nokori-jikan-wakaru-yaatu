@@ -10,7 +10,6 @@ import { UpdateModal, UpdateModalState } from '~/components/UpdateModal';
 export const meta: Route.MetaFunction = () => {
     return [{ title: 'アップデート' }, { name: 'description', content: '' }];
 };
-
 export interface Update {
     notes: string;
     pub_date: string;
@@ -88,7 +87,13 @@ export default function UpdatePage() {
                         state={updateState}
                     />
                 )}
-                <Flex direction='column' align='center' mt='lg'>
+                <Flex
+                    direction='column'
+                    align='center'
+                    justify='center'
+                    mt='lg'
+                    h='100%'
+                >
                     {updates
                         ? updates.map(update => (
                             <Update

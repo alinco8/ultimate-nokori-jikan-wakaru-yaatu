@@ -1,5 +1,5 @@
 import { Checkbox, CheckboxProps } from '@mantine/core';
-import { useDisabled } from '~/contexts/disabled';
+import { useConfigStore } from '~/stores/config';
 
 export type SettingCheckboxProps = {
     disableWhenPending?: boolean;
@@ -8,12 +8,12 @@ export type SettingCheckboxProps = {
 export const SettingCheckbox = (
     { disableWhenPending = true, ...checkboxProps }: SettingCheckboxProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
 
     return (
         <Checkbox
+            disabled={disableWhenPending && loading}
             {...checkboxProps}
-            disabled={disableWhenPending && isDisabled}
         />
     );
 };

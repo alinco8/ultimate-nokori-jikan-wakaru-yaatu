@@ -1,14 +1,23 @@
-import { Stack } from '@mantine/core';
+import { Checkbox, Stack } from '@mantine/core';
 
-export interface SettingProps {
-    children: React.ReactNode;
-}
-export const Setting = (
-    { children }: SettingProps,
-) => {
+import { SettingButton } from '~/components/SettingButton';
+import { SettingGroup } from '~/components/SettingGroup';
+import { SettingsAdvanced } from '~/components/SettingsAdvanced';
+import { SettingsBasic } from '~/components/SettingsBasic';
+import { SettingSelect } from '~/components/SettingSelect';
+import { SettingTextInput } from '~/components/SettingTextInput';
+
+export const Setting = () => {
     return (
         <Stack>
-            {children}
+            <SettingsBasic />
+            <SettingsAdvanced />
         </Stack>
     );
 };
+
+Setting.Button = SettingButton;
+Setting.Checkbox = Checkbox;
+Setting.Group = SettingGroup;
+Setting.Select = SettingSelect;
+Setting.TextInput = SettingTextInput;

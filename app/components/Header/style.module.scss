@@ -7,6 +7,6 @@
         var(--mantine-color-gray-2),
         var(--mantine-color-dark-6)
     );
-    border-bottom: rem(1px) solid
+    border-bottom: mantine.rem(1px) solid
         light-dark(var(--mantine-color-gray-2), transparent);
 }
