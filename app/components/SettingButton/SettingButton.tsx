@@ -1,5 +1,6 @@
 import { Button, ButtonProps } from '@mantine/core';
-import { useDisabled } from '~/contexts/disabled';
+import { SettingButtonModal } from '~/components/SettingButtonModal';
+import { useConfigStore } from '~/stores/config';
 
 export type SettingButtonProps = {
     disableWhenPending?: boolean;
@@ -8,12 +9,14 @@ export type SettingButtonProps = {
 export const SettingButton = (
     { disableWhenPending = true, ...buttonProps }: SettingButtonProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
 
     return (
         <Button
             {...buttonProps}
-            disabled={disableWhenPending && isDisabled}
+            disabled={disableWhenPending && loading}
         />
     );
 };
+
+SettingButton.Modal = SettingButtonModal;

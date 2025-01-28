@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Text, Title } from '@mantine/core';
+import { Button, ButtonProps, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 
 export type ButtonModalProps = {

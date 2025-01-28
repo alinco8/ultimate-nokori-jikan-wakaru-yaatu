@@ -1,6 +1,5 @@
 import { Box, BoxProps, Card, Title } from '@mantine/core';
 import { Markdown } from '~/components/Markdown';
-import {} from '@tauri-apps/api/app';
 
 export interface UpdateProps {
     version: string;
@@ -8,10 +7,8 @@ export interface UpdateProps {
 }
 
 export const Update = (
-    props: UpdateProps & BoxProps,
+    { version, description, ...props }: UpdateProps & BoxProps,
 ) => {
-    const { version, description } = props;
-
     return (
         <Box {...props}>
             <Title>v{version}</Title>

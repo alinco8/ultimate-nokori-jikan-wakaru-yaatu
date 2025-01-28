@@ -1,21 +1,25 @@
 import {
     AppShell,
     Center,
+    Container,
     Flex,
     ScrollArea,
     Tabs,
     Text,
+    Tooltip,
     useMantineTheme,
 } from '@mantine/core';
 import { IconBook2, IconHelp, IconSettings } from '@tabler/icons-react';
-import { useLocation } from 'react-router';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Header } from '~/components/Header';
+import { useConfigStore } from '~/stores/config';
 
 export default function Window() {
     const location = useLocation();
     const navigate = useNavigate();
     const theme = useMantineTheme();
+
+    const config = useConfigStore(store => store.config);
 
     return (
         <AppShell
@@ -37,9 +41,21 @@ export default function Window() {
                         }}
                     >
                         <Tabs.List>
-                            <Tabs.Tab value='/diary'>
-                                <IconBook2 />
-                            </Tabs.Tab>
+                            <Tooltip
+                                label={
+                                    <>
+                                        設定 の「PJS API」が必要です
+                                    </>
+                                }
+                            >
+                                <Tabs.Tab
+                                    value='/diary'
+                                    key={`tab-diary-${!config?.gas_url}`}
+                                    disabled={!config?.gas_url}
+                                >
+                                    <IconBook2 />
+                                </Tabs.Tab>
+                            </Tooltip>
                         </Tabs.List>
                     </Tabs>
                     <Tabs
@@ -65,7 +81,9 @@ export default function Window() {
             </AppShell.Navbar>
             <AppShell.Main>
                 <ScrollArea h='calc(100vh - 29px)'>
-                    <Outlet />
+                    <Container pt='lg'>
+                        <Outlet />
+                    </Container>
                     <Center mt='10rem'>
                         <Text size='xs' c='var(--mantine-color-dimmed)'>
                             © 2024 Alinco8

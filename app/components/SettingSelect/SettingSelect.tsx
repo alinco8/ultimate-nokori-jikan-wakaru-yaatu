@@ -1,5 +1,5 @@
 import { Select, SelectProps } from '@mantine/core';
-import { useDisabled } from '~/contexts/disabled';
+import { useConfigStore } from '~/stores/config';
 
 export type SettingSelectProps = {
     disableWhenPending?: boolean;
@@ -8,12 +8,12 @@ export type SettingSelectProps = {
 export const SettingSelect = (
     { disableWhenPending = true, ...selectProps }: SettingSelectProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
 
     return (
         <Select
             {...selectProps}
-            disabled={disableWhenPending && isDisabled}
+            disabled={disableWhenPending && loading}
         />
     );
 };

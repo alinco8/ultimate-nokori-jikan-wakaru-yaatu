@@ -170,12 +170,16 @@ export function calcCell(
     ]);
 }
 
+const BASE_DATE = new Date('2024/04/22');
+const BASE_CELL = new Cell('B7');
+const GROUP_HEIGHT = 10;
+
 export async function getRemoteDiaries(
     gasUrl: string,
     [start, end]: [Date, Date],
-    baseDate: Date,
-    baseCell: Cell,
-    groupHeight: number,
+    baseDate: Date = BASE_DATE,
+    baseCell: Cell = BASE_CELL,
+    groupHeight: number = GROUP_HEIGHT,
 ): Promise<string[]> {
     const startCell = calcCell(start, baseDate, baseCell, groupHeight);
     const endCell = calcCell(end, baseDate, baseCell, groupHeight);
@@ -192,10 +196,10 @@ export async function getRemoteDiaries(
 export async function setRemoteDiaries(
     gasUrl: string,
     [start, end]: [Date, Date],
-    baseDate: Date,
-    baseCell: Cell,
-    groupHeight: number,
     diaries: string[],
+    baseDate: Date = BASE_DATE,
+    baseCell: Cell = BASE_CELL,
+    groupHeight: number = GROUP_HEIGHT,
 ) {
     const startCell = calcCell(start, baseDate, baseCell, groupHeight);
     const endCell = calcCell(end, baseDate, baseCell, groupHeight);

@@ -1,19 +1,19 @@
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
+
 import pluginJs from '@eslint/js';
 import pluginImport from 'eslint-plugin-import';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
+import pluginTs, { config } from 'typescript-eslint';
 
 const flatCompat = new FlatCompat();
 
-export default [
+export default config([
     {
-        files: ['**/*.{,ts,tsx}'],
+        files: ['**/*.{ts,tsx}'],
         settings: {
             react: {
                 version: 'detect',
@@ -29,15 +29,16 @@ export default [
             },
         },
         plugins: {
-            'react-refresh': pluginReactRefresh,
             import: pluginImport,
+            // 'react-refresh': pluginReactRefresh,
             'react-hooks': pluginReactHooks,
         },
     },
     pluginJs.configs.recommended,
-    ...tseslint.configs.strictTypeChecked,
+    ...pluginTs.configs.strict,
     pluginReact.configs.flat.recommended,
     pluginReact.configs.flat['jsx-runtime'],
+    pluginReactRefresh.configs.recommended,
     ...fixupConfigRules(flatCompat.extends('plugin:storybook/recommended')),
     {
         rules: {
@@ -57,6 +58,8 @@ export default [
             'react/jsx-indent': 'off',
             '@typescript-eslint/no-dynamic-delete': 'off',
             '@typescript-eslint/unified-signatures': 'off',
+            'no-duplicate-imports': 'error',
+            '@typescript-eslint/no-misused-promises': 'error',
         },
     },
-];
+]);

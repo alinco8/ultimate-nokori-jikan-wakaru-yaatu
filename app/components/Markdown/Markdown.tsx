@@ -1,8 +1,10 @@
-import { Anchor, Box, Divider, List, Table, Text, Title } from '@mantine/core';
+import { CodeHighlight } from '@mantine/code-highlight';
+import { Box, Divider, List, Table, Text, Title } from '@mantine/core';
 import Marked, { Components } from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkEmoji from 'remark-emoji';
 import remarkGfm from 'remark-gfm';
+import { Link } from '~/components/Link';
 import styles from './styles.module.scss';
 
 // mb-4 mt-6 pb-2
@@ -43,17 +45,15 @@ const components: Components = {
     ),
     p: ({ children }) => <Text>{children}</Text>,
     a: ({ children, href, id }) => (
-        <Anchor
-            href={href}
+        <Link
+            to={href ?? '#'}
             id={id}
-            {...(href && new URL(href, location.href).host !== location.host
-                && {
-                    target: '_blank',
-                    rel: 'noreferrer noopener',
-                })}
+            external={href
+                ? new URL(href, location.href).host !== location.host
+                : false}
         >
             {children}
-        </Anchor>
+        </Link>
     ),
     table: ({ children }) => (
         <Table withColumnBorders withTableBorder striped>{children}</Table>
@@ -68,6 +68,25 @@ const components: Components = {
     ol: ({ children }) => <List type='ordered' pl='xl'>{children}</List>,
     ul: ({ children }) => <List pl='xl'>{children}</List>,
     li: ({ children }) => <List.Item>{children}</List.Item>,
+
+    img: ({ src, alt }) =>
+        src?.endsWith('#video')
+            ? (
+                <video
+                    src={src.slice(0, -6)}
+                    controls
+                    style={{ maxWidth: '80%' }}
+                />
+            )
+            : <img src={src} alt={alt} style={{ maxWidth: '80%' }} />,
+
+    code: ({ children, lang }) => (
+        <CodeHighlight
+            lang={lang}
+            copyLabel='コピー'
+            code={children?.toString() ?? 'Unknown'}
+        />
+    ),
 };
 
 export interface MarkdownProps {

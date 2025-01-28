@@ -1,5 +1,5 @@
 import { Card, CardProps, Flex, Group, Text, Textarea } from '@mantine/core';
-import { useDisabled } from '~/contexts/disabled';
+import { useConfigStore } from '~/stores/config';
 
 export type DiaryProps =
     & {
@@ -13,7 +13,7 @@ export type DiaryProps =
 export const Diary = (
     { date, diary, onBlur, today, empty, ...props }: DiaryProps,
 ) => {
-    const { isDisabled } = useDisabled();
+    const loading = useConfigStore(store => store.loading);
 
     return (
         <Card
@@ -42,7 +42,7 @@ export const Diary = (
                         </Card.Section>
                         <Group>
                             <Textarea
-                                disabled={isDisabled}
+                                disabled={loading}
                                 w='100%'
                                 styles={{
                                     input: {

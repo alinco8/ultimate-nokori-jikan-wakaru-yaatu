@@ -1,4 +1,4 @@
-import { HoverCard, Textarea } from '@mantine/core';
+import { Textarea } from '@mantine/core';
 import { useState } from 'react';
 
 export interface FormatterTableTextareaProps {
