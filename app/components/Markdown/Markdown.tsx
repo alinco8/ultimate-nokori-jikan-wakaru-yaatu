@@ -95,16 +95,17 @@ export interface MarkdownProps {
 
 export const Markdown = ({ content }: MarkdownProps) => {
     return (
-        <Marked
-            components={components}
-            remarkPlugins={[
-                remarkGfm,
-                remarkBreaks,
-                remarkEmoji,
-            ]}
-            className={styles.markdown}
-        >
-            {content}
-        </Marked>
+        <div className={styles.markdown}>
+            <Marked
+                components={components}
+                remarkPlugins={[
+                    remarkGfm,
+                    remarkBreaks,
+                    remarkEmoji,
+                ]}
+            >
+                {content}
+            </Marked>
+        </div>
     );
 };
